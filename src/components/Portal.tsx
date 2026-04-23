@@ -152,7 +152,7 @@ function ScheduleSection() {
       {/* Header */}
       <div className="space-y-1">
         <span className="text-[#1a5490] text-[10px] uppercase tracking-[10px] font-black">Event Itinerary</span>
-        <h2 className="text-3xl font-bold text-gray-900">Full Jubilee Schedule</h2>
+        <h2 className="fluid-3xl font-bold text-gray-900">Full Jubilee Schedule</h2>
         <p className="text-sm text-gray-400">April 7–12, 2026 · HEKAN Centre, No. 4/6 Katsina Road, Kaduna</p>
       </div>
 
@@ -298,7 +298,7 @@ function GivingSection({ onBack }: { onBack: () => void }) {
         <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10 max-w-2xl">
           <div className="text-[10px] uppercase tracking-[8px] text-white/60 font-black mb-3">60th Diamond Jubilee</div>
-          <h2 className="text-xl md:text-4xl font-serif italic text-white leading-tight mb-2">
+          <h2 className="fluid-3xl font-serif italic text-white leading-tight mb-2">
             Invest in the Legacy
           </h2>
           <p className="text-white/70 text-sm leading-relaxed max-w-lg">
@@ -472,7 +472,7 @@ function GallerySection() {
       <div className="flex items-end justify-between flex-wrap gap-3">
         <div className="space-y-1">
           <span className="text-[#1a5490] text-[10px] uppercase tracking-[10px] font-black">Legacy Visuals</span>
-          <h2 className="text-3xl font-bold text-gray-900">Anniversary Collections</h2>
+          <h2 className="fluid-3xl font-bold text-gray-900">Anniversary Collections</h2>
           <p className="text-sm text-gray-400">{GALLERY_IMAGES.length} photos · HEKAN 60th Diamond Jubilee · April 2026</p>
         </div>
       </div>
@@ -771,7 +771,7 @@ export default function Portal({ onBack, onInvest }: PortalProps) {
                   <div className="space-y-8 pb-20">
                     <div className="space-y-1">
                       <span className="text-[#1a5490] text-[10px] uppercase tracking-[10px] font-black">Regional Impact</span>
-                      <h2 className="text-3xl font-bold text-gray-900">Mission Footprint</h2>
+                      <h2 className="fluid-3xl font-bold text-gray-900">Mission Footprint</h2>
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                       {/* Map */}
@@ -877,7 +877,7 @@ export default function Portal({ onBack, onInvest }: PortalProps) {
                             >
                               <div className="flex justify-between items-start mb-3">
                                 <div>
-                                  <div className="text-base font-bold text-gray-900">{loc.state}</div>
+                                  <div className="fluid-base font-bold text-gray-900">{loc.state}</div>
                                   <div className="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">{loc.stations}</div>
                                 </div>
                                 <span className={`px-2 py-1 text-[8px] font-black uppercase tracking-tight rounded-lg ${loc.status === "Operational" ? "bg-green-50 text-green-700" :

@@ -92,7 +92,7 @@ function Kpi({ label, value, sub, icon, color, delay = 0 }: {
                 style={{ background: `${color}18`, color }}>
                 {icon}
             </div>
-            <div className="text-xl md:text-[26px] font-black text-gray-900 leading-none tracking-tight">{value}</div>
+            <div className="fluid-2xl font-black text-gray-900 leading-none tracking-tight">{value}</div>
             <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-1.5">{label}</div>
             {sub && <div className="text-[10px] text-gray-400 mt-0.5 truncate">{sub}</div>}
         </motion.div>
@@ -892,7 +892,7 @@ export default function AnalyticsView() {
             <div className="flex items-start justify-between">
                 <div>
                     <div className="text-[10px] uppercase tracking-[6px] text-[#1a5490] font-black">Convention Analytics</div>
-                    <h2 className="text-2xl font-black text-gray-900 mt-0.5">Registration Insights</h2>
+                    <h2 className="fluid-2xl font-black text-gray-900 mt-0.5">Registration Insights</h2>
                     <p className="text-sm text-gray-400 mt-0.5">
                         {rows.length.toLocaleString()} delegates · {dccAll.length} DCCs · {buildDist(rows, 'lcc').length} LCCs
                     </p>

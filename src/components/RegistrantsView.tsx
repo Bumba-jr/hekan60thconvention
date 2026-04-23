@@ -38,7 +38,7 @@ function StatCard({ label, value, sub, icon, color }: {
                     {icon}
                 </div>
             </div>
-            <div className="text-xl md:text-2xl font-black text-gray-900">{value}</div>
+            <div className="fluid-2xl font-black text-gray-900">{value}</div>
             <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-0.5">{label}</div>
             {sub && <div className="text-[10px] text-gray-400 mt-1 truncate">{sub}</div>}
         </div>
@@ -100,7 +100,7 @@ function DistrictStatCard({ registrants, type }: {
             </div>
 
             {/* Count + label */}
-            <div className="text-2xl font-black text-gray-900 leading-none">{total}</div>
+            <div className="fluid-2xl font-black text-gray-900 leading-none">{total}</div>
             <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-0.5 mb-auto">{label}</div>
 
             {/* Animated current item */}
@@ -395,7 +395,7 @@ export default function RegistrantsView() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <div className="text-[10px] uppercase tracking-[6px] text-[#1a5490] font-black">Convention Status</div>
-                    <h2 className="text-2xl font-black text-gray-900 mt-0.5">Registrants</h2>
+                    <h2 className="fluid-2xl font-black text-gray-900 mt-0.5">Registrants</h2>
                     {!loading && <p className="text-sm text-gray-400 mt-0.5">{registrants.length.toLocaleString()} total delegates</p>}
                 </div>
                 {/* Buttons hidden — re-enable when needed */}

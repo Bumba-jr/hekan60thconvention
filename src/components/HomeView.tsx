@@ -143,7 +143,7 @@ function DistrictCard({ dccList, lccList, dccCount, lccCount }: {
             </div>
 
             {/* Count + label */}
-            <div className="text-3xl font-black text-gray-900 leading-none tabular-nums">{total || '—'}</div>
+            <div className="fluid-3xl fluid-base font-black text-gray-900 leading-none tabular-nums">{total || '—'}</div>
             <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2">
                 {label} Represented
             </div>
@@ -251,13 +251,13 @@ export default function HomeView({
                         <div className="text-[11px] font-bold tracking-[4px] uppercase text-white/60 mb-2">
                             The United Church of Christ in Nigeria
                         </div>
-                        <h1 className="text-2xl md:text-6xl font-black tracking-tight leading-none">
+                        <h1 className="fluid-hero font-black tracking-tight leading-none">
                             HEKAN
                         </h1>
                         <p className="text-white/70 text-sm mt-2 italic">Hadaddiyar Ekklesiyar Kristi A Nigeria</p>
                     </div>
                     <div className="space-y-1">
-                        <p className="text-2xl md:text-3xl font-serif italic text-white/90">"We Are One In Christ"</p>
+                        <p className="fluid-3xl font-serif italic text-white/90">"We Are One In Christ"</p>
                         <p className="text-xs text-white/50 tracking-widest uppercase">Galatians 3:28 · Mu Daya Ne Cikin Kristi</p>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-white/70">
@@ -266,7 +266,7 @@ export default function HomeView({
                     </div>
                     <div className="flex flex-wrap gap-3 pt-2">
                         <button onClick={() => onNavigate('dashboard')}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#1a5490] rounded-xl text-sm font-black hover:bg-white/90 transition-all shadow-lg">
+                            className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#1a5490] rounded-xl fluid-sm font-black hover:bg-white/90 transition-all shadow-lg">
                             <Users size={15} /> View Registrants
                         </button>
                         <button onClick={onInvest}
@@ -291,7 +291,7 @@ export default function HomeView({
                                     { v: countdown.seconds, l: 'Secs' },
                                 ].map(({ v, l }) => (
                                     <div key={l} className="bg-white/10 rounded-xl p-3">
-                                        <div className="text-3xl font-black tabular-nums leading-none">
+                                        <div className="fluid-2xl font-black tabular-nums leading-none">
                                             {String(v).padStart(2, '0')}
                                         </div>
                                         <div className="text-[9px] uppercase tracking-widest text-white/50 mt-1">{l}</div>
@@ -319,7 +319,7 @@ export default function HomeView({
                         <div className="p-2.5 rounded-xl bg-blue-50 text-[#1a5490] transition-all group-hover:scale-110"><Users size={20} /></div>
                         <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-[#1a5490]">Live</span>
                     </div>
-                    <div className="text-3xl font-black text-gray-900 leading-none tabular-nums">{stats.delegates.toLocaleString()}</div>
+                    <div className="fluid-3xl fluid-base font-black text-gray-900 leading-none tabular-nums">{stats.delegates.toLocaleString()}</div>
                     <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2">Delegates Registered</div>
                     <div className="mt-auto pt-3">
                         <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
@@ -337,7 +337,7 @@ export default function HomeView({
                         <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 transition-all group-hover:scale-110"><DollarSign size={20} /></div>
                         <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Live</span>
                     </div>
-                    <div className="text-2xl font-black text-gray-900 leading-none">{naira(stats.revenue)}</div>
+                    <div className="text-2xl fluid-base font-black text-gray-900 leading-none">{naira(stats.revenue)}</div>
                     <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2">Revenue Collected</div>
                     <div className="mt-auto pt-3">
                         <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
@@ -360,7 +360,7 @@ export default function HomeView({
                             {countdown.past ? 'Completed' : 'Remaining'}
                         </span>
                     </div>
-                    <div className="text-3xl font-black text-gray-900 leading-none">{countdown.past ? 'Done' : countdown.days}</div>
+                    <div className="text-3xl fluid-base font-black text-gray-900 leading-none">{countdown.past ? 'Done' : countdown.days}</div>
                     <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2">Days to Convention</div>
                     <div className="mt-auto pt-3">
                         <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
@@ -386,7 +386,7 @@ export default function HomeView({
                         <img src="/president.jpg" alt="Rev. (Dr.) Amos G. Kiri"
                             className="w-full h-full object-cover object-top" />
                     </div>
-                    <h3 className="text-xl font-black leading-tight">Rev. (Dr.) Amos G. Kiri</h3>
+                    <h3 className="fluid-xl font-black leading-tight">Rev. (Dr.) Amos G. Kiri</h3>
                     <p className="text-white/70 text-sm mt-1">President, HEKAN</p>
                     <div className="mt-3 pt-3 border-t border-white/20">
                         <p className="text-[11px] text-white/50 italic">Valedictory Address — 60th Convention</p>
@@ -400,7 +400,7 @@ export default function HomeView({
                         <img src="/dr isaiah.jpg" alt="Rev. Dr. Isaiah Jirape Magaji"
                             className="w-full h-full object-cover object-top" />
                     </div>
-                    <h3 className="text-lg font-black text-gray-900 leading-tight">Rev. Dr. Isaiah Jirape Magaji</h3>
+                    <h3 className="fluid-lg fluid-base font-black text-gray-900 leading-tight">Rev. Dr. Isaiah Jirape Magaji</h3>
                     <p className="text-gray-500 text-sm mt-1">President, CRC-N</p>
                 </div>
 
@@ -434,7 +434,7 @@ export default function HomeView({
         <Section id="timeline" label="Event Timeline">
             <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center justify-between mb-5">
-                    <h3 className="font-black text-gray-900">April 7–12, 2026 · HEKAN Centre, Kaduna</h3>
+                    <h3 className="fluid-base font-black text-gray-900">April 7–12, 2026 · HEKAN Centre, Kaduna</h3>
                     <button onClick={() => onNavigate('schedule')}
                         className="text-[10px] uppercase tracking-widest text-[#1a5490] font-black hover:opacity-60 transition-opacity flex items-center gap-1">
                         Full Schedule <ArrowRight size={10} />
@@ -517,7 +517,7 @@ export default function HomeView({
             </div>
             <div className="bg-gradient-to-r from-[#1a5490]/5 to-[#1a5490]/10 border border-[#1a5490]/20 rounded-2xl p-5 flex items-center justify-between">
                 <div>
-                    <p className="font-black text-gray-900">Support the Legacy</p>
+                    <p className="fluid-base font-black text-gray-900">Support the Legacy</p>
                     <p className="text-sm text-gray-500 mt-0.5">Your contribution powers our mission for the next 60 years</p>
                 </div>
                 <button onClick={onInvest}
@@ -544,7 +544,7 @@ export default function HomeView({
                         <div className="p-3 rounded-2xl w-fit mx-auto mb-3" style={{ background: `${s.color}12`, color: s.color }}>
                             {s.icon}
                         </div>
-                        <div className="text-3xl font-black text-gray-900">{s.value}</div>
+                        <div className="text-3xl fluid-base font-black text-gray-900">{s.value}</div>
                         <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-1">{s.label}</div>
                         <div className="text-[10px] text-gray-400 mt-1 leading-relaxed">{s.sub}</div>
                     </motion.div>

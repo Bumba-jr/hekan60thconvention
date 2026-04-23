@@ -72,7 +72,7 @@ export default function App() {
             className="text-center"
           >
             <div className="text-[10px] md:text-[14px] font-serif tracking-[4px] uppercase text-[#1a5490] mb-2">The United Church of Christ in Nigeria</div>
-            <div className="text-4xl md:text-8xl font-black tracking-[4px] md:tracking-[8px] logo-acronym-gradient">HEKAN</div>
+            <div className="fluid-hero font-black tracking-[2px] md:tracking-[8px] logo-acronym-gradient">HEKAN</div>
             <div className="text-[10px] md:text-[12px] text-gray-500 italic mt-2">Hadaddiyar Ekklesiyar Kristi A Nigeria</div>
           </motion.div>
         </div>
@@ -96,7 +96,7 @@ export default function App() {
             initial={{ opacity: 0, scale: 3, filter: "blur(10px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-            className="text-5xl md:text-[140px] font-black leading-none text-artistic-diamond text-glow-diamond"
+            className="fluid-hero font-black leading-none text-artistic-diamond text-glow-diamond"
           >
             60th
           </motion.div>
@@ -253,7 +253,7 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5 }}
-            className="text-5xl md:text-8xl font-serif italic text-artistic-diamond leading-tight"
+            className="fluid-hero font-serif italic text-artistic-diamond leading-tight"
           >
             "We Are One In Christ"
           </motion.h1>
@@ -373,7 +373,7 @@ export default function App() {
             <motion.h2
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl md:text-7xl font-serif text-artistic-diamond"
+              className="fluid-hero font-serif text-artistic-diamond"
             >
               Welcome to the Portal
             </motion.h2>
@@ -480,20 +480,19 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center sm:p-4 bg-black/30 backdrop-blur-lg"
+            className="modal-sheet"
           >
             <motion.div
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="w-full max-w-xl bg-white border border-gray-200 p-4 md:p-8 relative shadow-2xl rounded-t-2xl sm:rounded-2xl"
+              className="modal-sheet-inner"
             >
-              {/* Drag handle — visible on mobile */}
-              <div className="sm:hidden w-10 h-1 bg-gray-200 rounded-full mx-auto mb-4" />
+              <span className="modal-sheet-handle" />
               <button
                 onClick={() => setIsDonationModalOpen(false)}
-                className="absolute top-5 right-5 text-gray-400 hover:text-gray-700 transition-colors"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors p-1"
               >
                 <X size={22} />
               </button>
@@ -501,7 +500,7 @@ export default function App() {
               <div className="space-y-6">
                 <div className="text-center space-y-2">
                   <span className="text-xs uppercase tracking-[6px] text-[#1a5490] font-black">Development Investment</span>
-                  <h3 className="text-3xl md:text-4xl font-serif text-gray-900 italic tracking-tight">Support Our Legacy</h3>
+                  <h3 className="fluid-3xl font-serif text-gray-900 italic tracking-tight">Support Our Legacy</h3>
                   <div className="h-px w-16 bg-[#1a5490]/20 mx-auto" />
                 </div>
 
@@ -514,7 +513,7 @@ export default function App() {
                   <div className="p-4 border border-gray-200 bg-white rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 group hover:border-[#1a5490]/40 transition-all shadow-sm">
                     <div className="text-center md:text-left">
                       <div className="text-[10px] text-[#1a5490] uppercase tracking-[2px] font-black mb-1">Account Number</div>
-                      <div className="text-lg md:text-2xl font-black text-gray-900 tracking-[2px] md:tracking-[4px] group-hover:text-[#1a5490] transition-colors">{bankDetails.accountNumber}</div>
+                      <div className="fluid-2xl font-black text-gray-900 tracking-[1px] md:tracking-[4px] group-hover:text-[#1a5490] transition-colors">{bankDetails.accountNumber}</div>
                     </div>
                     <button
                       onClick={handleCopy}
