@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Montserrat", sans-serif;
+
+  --color-artistic-bg: #ffffff;
+  --color-artistic-gold: #1a5490;
+  --color-artistic-diamond: #1e3a5f;
+  --color-artistic-accent: #2980b9;
+}
+
+@layer utilities {
+  .portal-grid {
+    background-image:
+      linear-gradient(rgba(26, 84, 144, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 84, 144, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(26, 84, 144, 0.25);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(26, 84, 144, 0.45);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 overflow-hidden;
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(circle at 50% 0%, #eef4fb 0%, transparent 60%),
+      radial-gradient(circle at 90% 90%, #f0f7ff 0%, transparent 50%);
+  }
+}
+
+.cinematic-overlay {
+  background: radial-gradient(circle at center, transparent 0%, rgba(255, 255, 255, 0.55) 55%, rgba(255, 255, 255, 0.92) 100%);
+  pointer-events: none;
+}
+
+.scanlines {
+  background: linear-gradient(to bottom,
+      transparent 50%,
+      rgba(0, 0, 0, 0.008) 50%);
+  background-size: 100% 4px;
+}
+
+.text-glow-diamond {
+  text-shadow: 0 2px 12px rgba(26, 84, 144, 0.18);
+}
+
+.logo-acronym-gradient {
+  background: linear-gradient(135deg, #1a5490 0%, #2980b9 50%, #1a5490 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border {
+  border-color: rgba(26, 84, 144, 0.2);
+}
+
+.info-group-border {
+  border-left: 3px solid var(--color-artistic-gold);
+}
+
+.cursor-hide {
+  cursor: none;
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.animate-slow-zoom {
+  animation: slow-zoom 20s linear infinite alternate;
+}
