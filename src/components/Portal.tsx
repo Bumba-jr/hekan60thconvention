@@ -689,26 +689,22 @@ export default function Portal({ onBack, onInvest }: PortalProps) {
       <main className="flex-1 flex flex-col overflow-y-auto custom-scrollbar portal-grid min-w-0 pb-20 md:pb-0">
 
         {/* Top bar */}
-        <header className="h-auto min-h-[56px] border-b border-gray-200 flex items-center justify-between px-4 md:px-8 py-3 bg-white/90 backdrop-blur-sm sticky top-0 z-50 shadow-sm gap-3 flex-wrap">
-          <div className="flex items-center gap-3">
-            {/* Mobile: show current section name */}
-            <div className="flex items-center gap-2 sm:hidden">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
-              <span className="text-sm font-black text-gray-900 tracking-tight">
-                {navItems.find(n => n.id === activeSegment)?.label ?? "Portal"}
-              </span>
-              <span className="text-gray-300 font-light">|</span>
-              <span className="text-[10px] font-semibold text-gray-400 tracking-tight">HEKAN 60th</span>
-            </div>
-            {/* Desktop: Mission Control label */}
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
-              <span className="text-[10px] uppercase tracking-[3px] text-[#1a5490] font-black">Mission Control</span>
-            </div>
-            <div className="h-4 w-px bg-gray-200 hidden sm:block" />
-            <h1 className="text-xs font-semibold text-gray-600 tracking-tight hidden md:block">60th Jubilee Anniversary Portal</h1>
+        <header className="border-b border-gray-200 flex items-center justify-between px-3 md:px-8 py-2.5 bg-white/90 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+          {/* Left: section name */}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
+            <span className="text-sm font-black text-gray-900 tracking-tight truncate sm:hidden">
+              {navItems.find(n => n.id === activeSegment)?.label ?? "Portal"}
+            </span>
+            <span className="text-gray-200 font-light sm:hidden">|</span>
+            <span className="text-[10px] font-semibold text-gray-400 sm:hidden flex-shrink-0">HEKAN 60th</span>
+            <span className="hidden sm:inline text-[10px] uppercase tracking-[3px] text-[#1a5490] font-black">Mission Control</span>
+            <span className="hidden md:inline text-gray-200 mx-1">|</span>
+            <span className="hidden md:inline text-xs font-semibold text-gray-500 truncate">60th Jubilee Anniversary Portal</span>
           </div>
-          <div className="flex items-center gap-3">
+
+          {/* Right: countdown (lg only) + invest button */}
+          <div className="flex items-center gap-2 flex-shrink-0">
             <div className="hidden lg:flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5">
               {Object.entries(timeLeft).map(([unit, val], i) => (
                 <div key={unit} className="flex items-center">
@@ -720,12 +716,12 @@ export default function Portal({ onBack, onInvest }: PortalProps) {
                 </div>
               ))}
             </div>
-            {/* Inside portal: navigate to invest tab, don't close portal */}
             <button
               onClick={() => setActiveSegment("invest")}
-              className="px-4 py-2 bg-[#1a5490] text-white text-[10px] font-black uppercase tracking-[2px] rounded-lg hover:bg-[#154070] active:scale-95 transition-all shadow-md shadow-[#1a5490]/20 whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#1a5490] text-white rounded-lg hover:bg-[#154070] active:scale-95 transition-all shadow-sm flex-shrink-0"
             >
-              Invest Now
+              <Heart size={13} />
+              <span className="text-[10px] font-black uppercase tracking-[1px] hidden xs:inline sm:inline">Give</span>
             </button>
           </div>
         </header>

@@ -119,65 +119,48 @@ function DistrictCard({ dccList, lccList, dccCount, lccCount }: {
     return (
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.14 }}
-            className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group overflow-hidden flex flex-col"
-            style={{ minHeight: 160 }}
+            className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm flex flex-col gap-2 overflow-hidden"
         >
             {/* icon + toggle */}
-            <div className="flex justify-between items-start mb-4">
-                <div className="p-2.5 rounded-xl transition-all group-hover:scale-110"
-                    style={{ background: bg, color }}>
-                    {isDcc ? <Building2 size={20} /> : <Church size={20} />}
+            <div className="flex items-center justify-between">
+                <div className="p-2 rounded-lg" style={{ background: bg, color }}>
+                    {isDcc ? <Building2 size={16} /> : <Church size={16} />}
                 </div>
                 <div className="flex gap-1">
-                    <button onClick={() => setMode('dcc')}
-                        className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full transition-all cursor-pointer"
+                    <button onClick={() => setMode('dcc')} className="text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full cursor-pointer whitespace-nowrap"
                         style={{ background: mode === 'dcc' ? '#8b5cf6' : '#f5f3ff', color: mode === 'dcc' ? 'white' : '#8b5cf6' }}>
                         DCC
                     </button>
-                    <button onClick={() => setMode('lcc')}
-                        className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full transition-all cursor-pointer"
+                    <button onClick={() => setMode('lcc')} className="text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full cursor-pointer whitespace-nowrap"
                         style={{ background: mode === 'lcc' ? '#1a5490' : '#eff6ff', color: mode === 'lcc' ? 'white' : '#1a5490' }}>
                         LCC
                     </button>
                 </div>
             </div>
 
-            {/* Count + label */}
-            <div className="fluid-3xl fluid-base font-black text-gray-900 leading-none tabular-nums">{total || '—'}</div>
-            <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2">
-                {label} Represented
-            </div>
+            <div className="fluid-2xl font-black text-gray-900 leading-none tabular-nums">{total || '—'}</div>
+            <div className="text-[9px] uppercase tracking-wider text-gray-400 font-bold leading-tight">{label}</div>
 
-            {/* Animated item — mt-auto pushes to bottom */}
-            <div className="mt-auto pt-2 border-t border-gray-50">
+            {/* Animated item */}
+            <div className="border-t border-gray-50 pt-1.5 mt-auto">
                 <AnimatePresence mode="wait">
                     {current && visible && (
                         <motion.div key={`${mode}-${itemIdx}`}
-                            initial={{ opacity: 0, y: 4 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -4 }}
-                            transition={{ duration: 0.22 }}
-                            className="flex items-center justify-between gap-2"
+                            initial={{ opacity: 0, y: 3 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -3 }}
+                            transition={{ duration: 0.2 }}
                         >
-                            <span className="text-[10px] font-bold text-gray-700 truncate flex-1">{current.name}</span>
-                            <span className="text-[10px] font-black flex-shrink-0" style={{ color }}>
-                                {current.count}
-                            </span>
-                            <span className="text-[10px] text-emerald-600 font-bold flex-shrink-0">
-                                {naira(current.revenue)}
-                            </span>
+                            <div className="flex items-center gap-1 mb-1">
+                                <span className="text-[9px] font-bold text-gray-700 truncate flex-1">{current.name}</span>
+                                <span className="text-[8px] font-black flex-shrink-0" style={{ color }}>{current.count}</span>
+                            </div>
+                            <div className="h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                                <motion.div key={`bar-${mode}-${itemIdx}`} initial={{ width: 0 }}
+                                    animate={{ width: `${Math.round((current.count / (list[0]?.count || 1)) * 100)}%` }}
+                                    transition={{ duration: 0.45 }} className="h-full rounded-full" style={{ background: color }} />
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
-                <div className="mt-1.5 h-1 bg-gray-100 rounded-full overflow-hidden">
-                    <motion.div
-                        key={`bar-${mode}-${itemIdx}`}
-                        initial={{ width: 0 }}
-                        animate={{ width: current ? `${Math.round((current.count / (list[0]?.count || 1)) * 100)}%` : '0%' }}
-                        transition={{ duration: 0.5, ease: 'easeOut' }}
-                        className="h-full rounded-full" style={{ background: color }}
-                    />
-                </div>
             </div>
         </motion.div>
     );
@@ -310,65 +293,56 @@ export default function HomeView({
     // ── Section 2 — Stats ──────────────────────────────────────────────────────
     const Stats = (
         <Section id="stats" label="Convention at a Glance">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                 {/* Delegates */}
                 <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0 }}
-                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ minHeight: 160 }}>
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="p-2.5 rounded-xl bg-blue-50 text-[#1a5490] transition-all group-hover:scale-110"><Users size={20} /></div>
-                        <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-[#1a5490]">Live</span>
+                    className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                        <div className="p-2 rounded-lg bg-blue-50 text-[#1a5490]"><Users size={16} /></div>
+                        <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full bg-blue-50 text-[#1a5490] whitespace-nowrap">Live</span>
                     </div>
-                    <div className="fluid-3xl fluid-base font-black text-gray-900 leading-none tabular-nums">{stats.delegates.toLocaleString()}</div>
-                    <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2">Delegates Registered</div>
-                    <div className="mt-auto pt-3">
-                        <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
-                            <motion.div initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 1.2, ease: 'easeOut' }}
-                                className="h-full bg-[#1a5490] rounded-full" />
-                        </div>
+                    <div className="fluid-2xl font-black text-gray-900 leading-none tabular-nums">{stats.delegates.toLocaleString()}</div>
+                    <div className="text-[9px] uppercase tracking-wider text-gray-400 font-bold leading-tight">Delegates</div>
+                    <div className="h-0.5 bg-gray-100 rounded-full overflow-hidden mt-auto">
+                        <motion.div initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 1.2 }} className="h-full bg-[#1a5490] rounded-full" />
                     </div>
                 </motion.div>
 
                 {/* Revenue */}
                 <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.07 }}
-                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ minHeight: 160 }}>
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 transition-all group-hover:scale-110"><DollarSign size={20} /></div>
-                        <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Live</span>
+                    className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                        <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600"><DollarSign size={16} /></div>
+                        <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 whitespace-nowrap">Live</span>
                     </div>
-                    <div className="text-2xl fluid-base font-black text-gray-900 leading-none">{naira(stats.revenue)}</div>
-                    <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2">Revenue Collected</div>
-                    <div className="mt-auto pt-3">
-                        <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
-                            <motion.div initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 1.4, ease: 'easeOut' }}
-                                className="h-full bg-emerald-500 rounded-full" />
-                        </div>
+                    <div className="fluid-lg font-black text-gray-900 leading-none">{naira(stats.revenue)}</div>
+                    <div className="text-[9px] uppercase tracking-wider text-gray-400 font-bold leading-tight">Revenue</div>
+                    <div className="h-0.5 bg-gray-100 rounded-full overflow-hidden mt-auto">
+                        <motion.div initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 1.4 }} className="h-full bg-emerald-500 rounded-full" />
                     </div>
                 </motion.div>
 
-                {/* Animated DCC / LCC cycling card */}
+                {/* DCC/LCC cycling card */}
                 <DistrictCard dccList={dccList} lccList={lccList} dccCount={stats.dccs} lccCount={stats.lccs} />
 
                 {/* Days */}
                 <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.21 }}
-                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ minHeight: 160 }}>
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="p-2.5 rounded-xl bg-amber-50 text-amber-500 transition-all group-hover:scale-110"><Clock size={20} /></div>
-                        <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-amber-500">
-                            {countdown.past ? 'Completed' : 'Remaining'}
+                    className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                        <div className="p-2 rounded-lg bg-amber-50 text-amber-500"><Clock size={16} /></div>
+                        <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-500 whitespace-nowrap">
+                            {countdown.past ? 'Done' : 'Left'}
                         </span>
                     </div>
-                    <div className="text-3xl fluid-base font-black text-gray-900 leading-none">{countdown.past ? 'Done' : countdown.days}</div>
-                    <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-2">Days to Convention</div>
-                    <div className="mt-auto pt-3">
-                        <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
-                            <motion.div initial={{ width: 0 }}
-                                animate={{ width: countdown.past ? '100%' : `${Math.max(5, 100 - (countdown.days / 365) * 100)}%` }}
-                                transition={{ duration: 1.2, ease: 'easeOut' }}
-                                className="h-full bg-amber-400 rounded-full" />
-                        </div>
+                    <div className="fluid-2xl font-black text-gray-900 leading-none">{countdown.past ? '✓' : countdown.days}</div>
+                    <div className="text-[9px] uppercase tracking-wider text-gray-400 font-bold leading-tight">Days to Conv.</div>
+                    <div className="h-0.5 bg-gray-100 rounded-full overflow-hidden mt-auto">
+                        <motion.div initial={{ width: 0 }}
+                            animate={{ width: countdown.past ? '100%' : `${Math.max(5, 100 - (countdown.days / 365) * 100)}%` }}
+                            transition={{ duration: 1.2 }} className="h-full bg-amber-400 rounded-full" />
                     </div>
                 </motion.div>
             </div>
