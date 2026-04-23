@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -8,7 +9,7 @@ import {
     Users, DollarSign, TrendingUp, Award,
     BarChart3, Loader2, AlertCircle, RefreshCw,
     CreditCard, Banknote, HelpCircle,
-    ArrowUpRight, ArrowDownRight, Minus,
+    ArrowUpRight, ArrowDownRight, Minus, Search, ChevronDown,
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured, Registrant, fetchAllRegistrants } from '../lib/supabase';
 import { AnalyticsSkeleton } from './Skeleton';
@@ -527,6 +528,123 @@ function DCCSpotlight({ rows }: { rows: Registrant[] }) {
     );
 }
 
+// ── Custom searchable dropdown ────────────────────────────────────────────────
+function CustomSelect({ options, value, onChange, exclude, color, label }: {
+    options: { name: string; count: number }[];
+    value: number;
+    onChange: (i: number) => void;
+    exclude: number;
+    color: string;
+    label: string;
+}) {
+    const [open, setOpen] = useState(false);
+    const [search, setSearch] = useState('');
+    const ref = React.useRef<HTMLDivElement>(null);
+
+    // Close on outside click
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (ref.current && !ref.current.contains(e.target as Node)) {
+                setOpen(false);
+                setSearch('');
+            }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, []);
+
+    const filtered = options
+        .map((o, i) => ({ ...o, i }))
+        .filter(o => o.i !== exclude && o.name.toLowerCase().includes(search.toLowerCase()));
+
+    const selected = options[value];
+
+    return (
+        <div ref={ref} className="relative">
+            {/* Trigger */}
+            <button
+                onClick={() => { setOpen(v => !v); setSearch(''); }}
+                className="w-full flex items-center justify-between gap-2 px-3 py-2.5 bg-white border-2 rounded-xl text-left transition-all hover:border-opacity-80"
+                style={{ borderColor: open ? color : '#e5e7eb' }}
+            >
+                <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
+                    <span className="text-xs font-bold text-gray-900 truncate">
+                        {selected ? trunc(selected.name, 22) : 'Select…'}
+                    </span>
+                    {selected && (
+                        <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full flex-shrink-0"
+                            style={{ background: `${color}18`, color }}>
+                            {selected.count}
+                        </span>
+                    )}
+                </div>
+                <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                    <ChevronDown size={14} className="text-gray-400 flex-shrink-0" />
+                </motion.div>
+            </button>
+
+            {/* Dropdown panel */}
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -6, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -6, scale: 0.97 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 overflow-hidden"
+                        style={{ boxShadow: `0 8px 32px ${color}20, 0 2px 8px rgba(0,0,0,0.08)` }}
+                    >
+                        {/* Search */}
+                        <div className="p-2 border-b border-gray-100">
+                            <div className="relative">
+                                <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-300" />
+                                <input
+                                    autoFocus
+                                    value={search}
+                                    onChange={e => setSearch(e.target.value)}
+                                    placeholder={`Search ${label}…`}
+                                    className="w-full pl-7 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-100 rounded-lg focus:outline-none focus:border-gray-300 transition-all"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Options */}
+                        <div className="max-h-52 overflow-y-auto custom-scrollbar">
+                            {filtered.length === 0 ? (
+                                <div className="px-3 py-4 text-center text-xs text-gray-400">No matches</div>
+                            ) : (
+                                filtered.map(o => (
+                                    <button
+                                        key={o.i}
+                                        onClick={() => { onChange(o.i); setOpen(false); setSearch(''); }}
+                                        className="w-full flex items-center justify-between gap-3 px-3 py-2.5 text-left hover:bg-gray-50 transition-colors group"
+                                        style={{ background: o.i === value ? `${color}08` : undefined }}
+                                    >
+                                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                                            {o.i === value && (
+                                                <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
+                                            )}
+                                            <span className={`text-xs truncate ${o.i === value ? 'font-black' : 'font-semibold text-gray-700'}`}
+                                                style={{ color: o.i === value ? color : undefined }}>
+                                                {o.name}
+                                            </span>
+                                        </div>
+                                        <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full flex-shrink-0"
+                                            style={{ background: `${color}15`, color }}>
+                                            {o.count}
+                                        </span>
+                                    </button>
+                                ))
+                            )}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
 // ── DCC Comparison Card ───────────────────────────────────────────────────────
 function DCCComparison({ rows }: { rows: Registrant[] }) {
     // Build DCC list
@@ -543,85 +661,94 @@ function DCCComparison({ rows }: { rows: Registrant[] }) {
         .map(([name, d]) => ({ name, count: d.count, amount: d.amount, lccs: d.lccs.size, avg: d.count > 0 ? Math.round(d.amount / d.count) : 0 }))
         .sort((a, b) => b.count - a.count);
 
-    const [idxA, setIdxA] = useState(0);
-    const [idxB, setIdxB] = useState(Math.min(1, dccs.length - 1));
+    // Build LCC list
+    const lccMap = new Map<string, { count: number; amount: number }>();
+    rows.forEach(r => {
+        const k = r.lcc?.trim() || 'Unknown';
+        if (!lccMap.has(k)) lccMap.set(k, { count: 0, amount: 0 });
+        const d = lccMap.get(k)!;
+        d.count++;
+        d.amount += parseAmt(r.amount);
+    });
+    const lccs = [...lccMap.entries()]
+        .map(([name, d]) => ({ name, count: d.count, amount: d.amount, avg: d.count > 0 ? Math.round(d.amount / d.count) : 0, lccs: 0 }))
+        .sort((a, b) => b.count - a.count);
 
-    if (dccs.length < 2) return (
-        <Card title="DCC Comparison" sub="Select two DCCs to compare">
-            <div className="flex items-center justify-center h-32 text-gray-400 text-sm">
-                Need at least 2 DCCs to compare
-            </div>
+    const [mode, setMode] = useState<'dcc' | 'lcc'>('dcc');
+    const list = mode === 'dcc' ? dccs : lccs;
+
+    const [idxA, setIdxA] = useState(0);
+    const [idxB, setIdxB] = useState(1);
+
+    // Reset indices when mode changes
+    useEffect(() => { setIdxA(0); setIdxB(Math.min(1, list.length - 1)); }, [mode]);
+
+    if (list.length < 2) return (
+        <Card title="Comparison" sub="Need at least 2 entries to compare">
+            <div className="flex items-center justify-center h-32 text-gray-400 text-sm">Not enough data</div>
         </Card>
     );
 
-    const A = dccs[idxA];
-    const B = dccs[idxB];
+    const A = list[idxA];
+    const B = list[idxB];
 
     const metrics = [
-        {
-            label: 'Delegates',
-            a: A.count, b: B.count,
-            fmt: (v: number) => v.toLocaleString(),
-            colorA: '#1a5490', colorB: '#6366f1',
-        },
-        {
-            label: 'Total Revenue',
-            a: A.amount, b: B.amount,
-            fmt: (v: number) => naira(v),
-            colorA: '#10b981', colorB: '#f59e0b',
-        },
-        {
-            label: 'Avg per Delegate',
-            a: A.avg, b: B.avg,
-            fmt: (v: number) => naira(v),
-            colorA: '#8b5cf6', colorB: '#ec4899',
-        },
-        {
-            label: 'Local Churches',
-            a: A.lccs, b: B.lccs,
-            fmt: (v: number) => v.toString(),
-            colorA: '#0ea5e9', colorB: '#ef4444',
-        },
+        { label: 'Delegates', a: A.count, b: B.count, fmt: (v: number) => v.toLocaleString(), colorA: '#1a5490', colorB: '#6366f1' },
+        { label: 'Total Revenue', a: A.amount, b: B.amount, fmt: (v: number) => naira(v), colorA: '#10b981', colorB: '#f59e0b' },
+        { label: 'Avg per Delegate', a: A.avg, b: B.avg, fmt: (v: number) => naira(v), colorA: '#8b5cf6', colorB: '#ec4899' },
     ];
 
-    const SelectDCC = ({ value, onChange, exclude }: { value: number; onChange: (i: number) => void; exclude: number }) => (
-        <select value={value} onChange={e => onChange(Number(e.target.value))}
-            className="w-full text-xs border border-gray-200 rounded-xl px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#1a5490]/30 font-semibold text-gray-700">
-            {dccs.map((d, i) => (
-                <option key={i} value={i} disabled={i === exclude}>
-                    {trunc(d.name, 30)} ({d.count})
-                </option>
-            ))}
-        </select>
-    );
+    const typeLabel = mode === 'dcc' ? 'DCC' : 'LCC';
 
     return (
-        <Card title="DCC Comparison" sub="Head-to-head comparison between any two District Church Councils">
+        <Card
+            title={`${typeLabel} Comparison`}
+            sub={`Head-to-head comparison between any two ${mode === 'dcc' ? 'District' : 'Local'} Church Councils`}
+        >
+            {/* Mode toggle */}
+            <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1 mb-5 w-fit">
+                {(['dcc', 'lcc'] as const).map(m => (
+                    <button key={m} onClick={() => setMode(m)}
+                        className="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all"
+                        style={{
+                            background: mode === m ? '#1a5490' : 'transparent',
+                            color: mode === m ? 'white' : '#6b7280',
+                        }}>
+                        {m}
+                    </button>
+                ))}
+            </div>
+
             {/* Selectors */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-3 mb-5">
                 <div>
                     <div className="text-[10px] font-black uppercase tracking-widest text-[#1a5490] mb-1.5 flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#1a5490]" /> DCC A
+                        <span className="w-2 h-2 rounded-full bg-[#1a5490]" /> {typeLabel} A
                     </div>
-                    <SelectDCC value={idxA} onChange={setIdxA} exclude={idxB} />
+                    <CustomSelect
+                        options={list} value={idxA} onChange={setIdxA}
+                        exclude={idxB} color="#1a5490" label={typeLabel}
+                    />
                 </div>
                 <div>
                     <div className="text-[10px] font-black uppercase tracking-widest text-[#6366f1] mb-1.5 flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#6366f1]" /> DCC B
+                        <span className="w-2 h-2 rounded-full bg-[#6366f1]" /> {typeLabel} B
                     </div>
-                    <SelectDCC value={idxB} onChange={setIdxB} exclude={idxA} />
+                    <CustomSelect
+                        options={list} value={idxB} onChange={setIdxB}
+                        exclude={idxA} color="#6366f1" label={typeLabel}
+                    />
                 </div>
             </div>
 
             {/* Name badges */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-                {[
-                    { d: A, color: '#1a5490', bg: '#eff6ff' },
-                    { d: B, color: '#6366f1', bg: '#eef2ff' },
-                ].map(({ d, color, bg }, i) => (
-                    <div key={i} className="p-3 rounded-xl text-center"
-                        style={{ background: bg }}>
+            <div className="grid grid-cols-2 gap-3 mb-5">
+                {[{ d: A, color: '#1a5490', bg: '#eff6ff' }, { d: B, color: '#6366f1', bg: '#eef2ff' }].map(({ d, color, bg }, i) => (
+                    <div key={i} className="p-3 rounded-xl text-center" style={{ background: bg }}>
                         <div className="text-xs font-black truncate" style={{ color }}>{d.name}</div>
+                        <div className="text-[10px] font-semibold mt-0.5" style={{ color: `${color}80` }}>
+                            {d.count} delegates · {naira(d.amount)}
+                        </div>
                     </div>
                 ))}
             </div>
@@ -633,9 +760,7 @@ function DCCComparison({ rows }: { rows: Registrant[] }) {
                     const pctA = Math.round((m.a / max) * 100);
                     const pctB = Math.round((m.b / max) * 100);
                     const winner = m.a > m.b ? 'A' : m.b > m.a ? 'B' : 'tie';
-                    const diff = m.a !== 0 && m.b !== 0
-                        ? Math.round(Math.abs(m.a - m.b) / Math.min(m.a, m.b) * 100)
-                        : 0;
+                    const diff = m.a !== 0 && m.b !== 0 ? Math.round(Math.abs(m.a - m.b) / Math.min(m.a, m.b) * 100) : 0;
 
                     return (
                         <div key={i}>
@@ -643,13 +768,8 @@ function DCCComparison({ rows }: { rows: Registrant[] }) {
                                 <span className="text-xs font-black text-gray-600 uppercase tracking-wider">{m.label}</span>
                                 {winner !== 'tie' ? (
                                     <span className="flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-full"
-                                        style={{
-                                            background: winner === 'A' ? '#eff6ff' : '#eef2ff',
-                                            color: winner === 'A' ? '#1a5490' : '#6366f1',
-                                        }}>
-                                        {winner === 'A'
-                                            ? <ArrowUpRight size={10} />
-                                            : <ArrowDownRight size={10} />}
+                                        style={{ background: winner === 'A' ? '#eff6ff' : '#eef2ff', color: winner === 'A' ? '#1a5490' : '#6366f1' }}>
+                                        {winner === 'A' ? <ArrowUpRight size={10} /> : <ArrowDownRight size={10} />}
                                         {trunc(winner === 'A' ? A.name : B.name, 14)} +{diff}%
                                     </span>
                                 ) : (
@@ -659,14 +779,10 @@ function DCCComparison({ rows }: { rows: Registrant[] }) {
                                 )}
                             </div>
                             <div className="grid grid-cols-2 gap-3">
-                                {[
-                                    { val: m.a, pct: pctA, color: m.colorA },
-                                    { val: m.b, pct: pctB, color: m.colorB },
-                                ].map((s, j) => (
+                                {[{ val: m.a, pct: pctA, color: m.colorA }, { val: m.b, pct: pctB, color: m.colorB }].map((s, j) => (
                                     <div key={j}>
                                         <div className="flex justify-between text-[10px] mb-1">
-                                            <span className="font-bold truncate max-w-[90px]"
-                                                style={{ color: s.color }}>
+                                            <span className="font-bold truncate max-w-[90px]" style={{ color: s.color }}>
                                                 {trunc(j === 0 ? A.name : B.name, 12)}
                                             </span>
                                             <span className="font-black text-gray-900">{m.fmt(s.val)}</span>

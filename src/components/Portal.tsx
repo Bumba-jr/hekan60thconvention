@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Calendar, MapPin, Heart, Users, ChevronRight, Clock,
@@ -431,6 +431,24 @@ const GALLERY_IMAGES = Array.from({ length: 31 }, (_, i) => `/60th/image${i + 1}
 
 function GallerySection() {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [visible, setVisible] = useState(9); // start with 9, load 9 more on scroll
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Infinite scroll — load 9 more when sentinel enters viewport
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visible < GALLERY_IMAGES.length) {
+          setVisible(v => Math.min(v + 9, GALLERY_IMAGES.length));
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [visible]);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -446,7 +464,7 @@ function GallerySection() {
 
   // Distribute images across 3 columns for masonry
   const cols: string[][] = [[], [], []];
-  GALLERY_IMAGES.forEach((img, i) => cols[i % 3].push(img));
+  GALLERY_IMAGES.slice(0, visible).forEach((img, i) => cols[i % 3].push(img));
 
   return (
     <div className="space-y-6 pb-20">
@@ -460,9 +478,9 @@ function GallerySection() {
       </div>
 
       {/* Masonry grid — 3 columns */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
         {cols.map((col, ci) => (
-          <div key={ci} className="flex flex-col gap-3">
+          <div key={ci} className="flex flex-col gap-1">
             {col.map((src, ri) => {
               const globalIdx = ri * 3 + ci;
               return (
@@ -472,7 +490,7 @@ function GallerySection() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: globalIdx * 0.03, duration: 0.4 }}
                   onClick={() => setLightbox(globalIdx)}
-                  className="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300"
+                  className="group relative overflow-hidden rounded-lg cursor-pointer shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300"
                 >
                   <img
                     src={src}
@@ -496,6 +514,27 @@ function GallerySection() {
             })}
           </div>
         ))}
+      </div>
+
+      {/* Sentinel — triggers loading more images when scrolled into view */}
+      <div ref={sentinelRef} className="flex flex-col items-center gap-2 py-4">
+        {visible < GALLERY_IMAGES.length ? (
+          <>
+            <div className="flex gap-1">
+              {[0, 1, 2].map(i => (
+                <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#1a5490]/40 animate-bounce"
+                  style={{ animationDelay: `${i * 0.15}s` }} />
+              ))}
+            </div>
+            <p className="text-[10px] text-gray-400 uppercase tracking-widest">
+              {visible} of {GALLERY_IMAGES.length} · scroll for more
+            </p>
+          </>
+        ) : (
+          <p className="text-[10px] text-gray-400 uppercase tracking-widest">
+            All {GALLERY_IMAGES.length} photos loaded
+          </p>
+        )}
       </div>
 
       {/* Lightbox */}
