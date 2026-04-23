@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import {
   Calendar, MapPin, Heart, Users, ChevronRight, Clock,
   Image as ImageIcon, ExternalLink, BarChart3, Home,
-  CheckCircle2, ChevronDown, Copy,
+  CheckCircle2, ChevronDown, Copy, X, ZoomIn,
 } from "lucide-react";
 import RegistrantsView from "./RegistrantsView";
 import AnalyticsView from "./AnalyticsView";
@@ -426,6 +426,187 @@ function GivingSection({ onBack }: { onBack: () => void }) {
   );
 }
 
+// ── Gallery — Masonry layout with lightbox ────────────────────────────────────
+const GALLERY_IMAGES = [
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.03 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM (1).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM (2).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM (3).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM (4).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.05 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.06 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.06 PM (1).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.08 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.08 PM (1).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.08 PM (2).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.08 PM (3).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.09 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.09 PM (1).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.09 PM (2).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.10 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.10 PM (1).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.10 PM (2).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.11 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.11 PM (1).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.11 PM (2).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.11 PM (3).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.12 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.12 PM (1).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.12 PM (2).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.12 PM (3).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.23.13 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.25.23 PM.jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.25.23 PM (1).jpeg",
+  "/60th/WhatsApp Image 2026-04-23 at 1.25.23 PM (2).jpeg",
+];
+
+function GallerySection() {
+  const [lightbox, setLightbox] = useState<number | null>(null);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (lightbox === null) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") setLightbox(p => p !== null ? Math.min(p + 1, GALLERY_IMAGES.length - 1) : null);
+      if (e.key === "ArrowLeft") setLightbox(p => p !== null ? Math.max(p - 1, 0) : null);
+      if (e.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightbox]);
+
+  // Distribute images across 3 columns for masonry
+  const cols: string[][] = [[], [], []];
+  GALLERY_IMAGES.forEach((img, i) => cols[i % 3].push(img));
+
+  return (
+    <div className="space-y-6 pb-20">
+      {/* Header */}
+      <div className="flex items-end justify-between flex-wrap gap-3">
+        <div className="space-y-1">
+          <span className="text-[#1a5490] text-[10px] uppercase tracking-[10px] font-black">Legacy Visuals</span>
+          <h2 className="text-3xl font-bold text-gray-900">Anniversary Collections</h2>
+          <p className="text-sm text-gray-400">{GALLERY_IMAGES.length} photos · HEKAN 60th Diamond Jubilee · April 2026</p>
+        </div>
+      </div>
+
+      {/* Masonry grid — 3 columns */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {cols.map((col, ci) => (
+          <div key={ci} className="flex flex-col gap-3">
+            {col.map((src, ri) => {
+              const globalIdx = ri * 3 + ci;
+              return (
+                <motion.div
+                  key={src}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: globalIdx * 0.03, duration: 0.4 }}
+                  onClick={() => setLightbox(globalIdx)}
+                  className="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300"
+                >
+                  <img
+                    src={src}
+                    alt={`HEKAN 60th Convention ${globalIdx + 1}`}
+                    className="w-full h-auto object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-90"
+                    loading="lazy"
+                  />
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end p-3">
+                    <div className="flex items-center gap-2">
+                      <ZoomIn size={14} className="text-white" />
+                      <span className="text-[10px] text-white font-bold uppercase tracking-wider">View</span>
+                    </div>
+                  </div>
+                  {/* Index badge */}
+                  <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    {globalIdx + 1}/{GALLERY_IMAGES.length}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[500] bg-black/95 flex items-center justify-center p-4"
+            onClick={() => setLightbox(null)}
+          >
+            {/* Close */}
+            <button
+              onClick={() => setLightbox(null)}
+              className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-10"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Counter */}
+            <div className="absolute top-4 left-4 text-white/60 text-sm font-bold z-10">
+              {lightbox + 1} / {GALLERY_IMAGES.length}
+            </div>
+
+            {/* Prev */}
+            {lightbox > 0 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setLightbox(lightbox - 1); }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-10"
+              >
+                <ChevronRight size={22} className="rotate-180" />
+              </button>
+            )}
+
+            {/* Next */}
+            {lightbox < GALLERY_IMAGES.length - 1 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setLightbox(lightbox + 1); }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-10"
+              >
+                <ChevronRight size={22} />
+              </button>
+            )}
+
+            {/* Image */}
+            <motion.img
+              key={lightbox}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              src={GALLERY_IMAGES[lightbox]}
+              alt={`HEKAN 60th Convention ${lightbox + 1}`}
+              className="max-h-[90vh] max-w-[90vw] object-contain rounded-xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+
+            {/* Thumbnail strip */}
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 px-4 overflow-x-auto">
+              {GALLERY_IMAGES.map((src, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => { e.stopPropagation(); setLightbox(i); }}
+                  className={`flex-shrink-0 w-10 h-10 rounded-lg overflow-hidden border-2 transition-all ${i === lightbox ? "border-white scale-110" : "border-transparent opacity-50 hover:opacity-80"
+                    }`}
+                >
+                  <img src={src} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function Portal({ onBack, onInvest }: PortalProps) {
   const [activeSegment, setActiveSegment] = useState(() => {
     return localStorage.getItem("hekan_portal_segment") || "home";
@@ -723,41 +904,7 @@ export default function Portal({ onBack, onInvest }: PortalProps) {
 
                 {/* ─── GALLERY ─── */}
                 {activeSegment === "gallery" && (
-                  <div className="space-y-8 pb-20">
-                    <div className="flex items-end justify-between flex-wrap gap-3">
-                      <div className="space-y-1">
-                        <span className="text-[#1a5490] text-[10px] uppercase tracking-[10px] font-black">Legacy Visuals</span>
-                        <h2 className="text-3xl font-bold text-gray-900">Anniversary Collections</h2>
-                      </div>
-                      <div className="flex gap-2 flex-wrap">
-                        {["All", "Historical", "Medical", "Education"].map((cat) => (
-                          <button key={cat} className="text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-lg hover:bg-[#1a5490] hover:text-white text-gray-500 transition-all border border-gray-200">
-                            {cat}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {[
-                        { src: "https://images.unsplash.com/photo-1519491050282-cf00c82424b4", title: "Medical Mission 1984" },
-                        { src: "https://images.unsplash.com/photo-1541339907198-e08756ebafe3", title: "Foundation Stone Laying" },
-                        { src: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3", title: "Synod Gathering" },
-                        { src: "https://images.unsplash.com/photo-1548625361-195fe01823fe", title: "Youth Empowerment" },
-                        { src: "https://images.unsplash.com/photo-1601247483531-41bcd22409f5", title: "Rural Outreach" },
-                        { src: "https://images.unsplash.com/photo-1438032005730-c779502df39b", title: "Old Kaduna HQ" },
-                      ].map((img, i) => (
-                        <div key={i} className="group relative aspect-square rounded-2xl overflow-hidden cursor-pointer border border-gray-100 shadow-sm">
-                          <img src={`${img.src}?auto=format&fit=crop&q=80&w=800`} alt={img.title}
-                            className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 group-hover:scale-105"
-                            referrerPolicy="no-referrer" />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all p-4 flex flex-col justify-end">
-                            <div className="text-xs font-black uppercase tracking-widest text-white mb-0.5">{img.title}</div>
-                            <div className="text-[9px] text-white/60">Diamond Jubilee Archive</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  <GallerySection />
                 )}
 
                 {/* ─── INVEST / GIVING ─── */}
