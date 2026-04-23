@@ -427,39 +427,7 @@ function GivingSection({ onBack }: { onBack: () => void }) {
 }
 
 // ── Gallery — Masonry layout with lightbox ────────────────────────────────────
-const GALLERY_IMAGES = [
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.03 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM (1).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM (2).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM (3).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.04 PM (4).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.05 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.06 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.06 PM (1).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.08 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.08 PM (1).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.08 PM (2).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.08 PM (3).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.09 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.09 PM (1).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.09 PM (2).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.10 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.10 PM (1).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.10 PM (2).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.11 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.11 PM (1).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.11 PM (2).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.11 PM (3).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.12 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.12 PM (1).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.12 PM (2).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.12 PM (3).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.23.13 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.25.23 PM.jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.25.23 PM (1).jpeg",
-  "/60th/WhatsApp Image 2026-04-23 at 1.25.23 PM (2).jpeg",
-];
+const GALLERY_IMAGES = Array.from({ length: 31 }, (_, i) => `/60th/image${i + 1}.jpeg`);
 
 function GallerySection() {
   const [lightbox, setLightbox] = useState<number | null>(null);
