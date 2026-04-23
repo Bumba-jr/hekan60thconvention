@@ -398,7 +398,33 @@ export default function RegistrantsView() {
                     <h2 className="fluid-2xl font-black text-gray-900 mt-0.5">Registrants</h2>
                     {!loading && <p className="text-sm text-gray-400 mt-0.5">{registrants.length.toLocaleString()} total delegates</p>}
                 </div>
-                {/* Buttons hidden — re-enable when needed */}
+                <div className="flex items-center gap-2 flex-wrap">
+                    <button
+                        onClick={fetchAll}
+                        disabled={loading}
+                        className="p-2.5 border border-gray-200 rounded-xl text-gray-400 hover:text-[#1a5490] hover:border-[#1a5490]/30 transition-all"
+                        title="Refresh"
+                    >
+                        <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
+                    </button>
+                    <button
+                        onClick={() => setShowClearConfirm(true)}
+                        className="p-2.5 border border-gray-200 rounded-xl text-gray-400 hover:text-red-500 hover:border-red-200 transition-all"
+                        title="Clear all data"
+                    >
+                        <Trash2 size={15} />
+                    </button>
+                    <button
+                        onClick={() => setShowUploader(v => !v)}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${showUploader
+                            ? 'bg-gray-100 text-gray-600'
+                            : 'bg-[#1a5490] text-white hover:bg-[#154070] shadow-md shadow-[#1a5490]/20'
+                            }`}
+                    >
+                        {showUploader ? <X size={15} /> : <TrendingUp size={15} />}
+                        {showUploader ? 'Cancel' : 'Upload XLSX'}
+                    </button>
+                </div>
             </div>
 
             {/* Clear confirm */}
