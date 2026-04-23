@@ -32,13 +32,13 @@ function StatCard({ label, value, sub, icon, color }: {
     icon: React.ReactNode; color: string;
 }) {
     return (
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group" style={{ height: 180 }}>
+        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group" style={{ minHeight: 160 }}>
             <div className="flex justify-between items-start mb-3">
                 <div className="p-2.5 rounded-xl transition-all group-hover:scale-110" style={{ background: `${color}15`, color }}>
                     {icon}
                 </div>
             </div>
-            <div className="text-2xl font-black text-gray-900">{value}</div>
+            <div className="text-xl md:text-2xl font-black text-gray-900">{value}</div>
             <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-0.5">{label}</div>
             {sub && <div className="text-[10px] text-gray-400 mt-1 truncate">{sub}</div>}
         </div>
@@ -88,7 +88,7 @@ function DistrictStatCard({ registrants, type }: {
     const Icon = type === 'dcc' ? Building2 : Church;
 
     return (
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col overflow-hidden" style={{ height: 180 }}>
+        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col overflow-hidden" style={{ minHeight: 160 }}>
             {/* Top row */}
             <div className="flex justify-between items-start mb-3">
                 <div className="p-2.5 rounded-xl" style={{ background: bg, color }}>
@@ -148,7 +148,7 @@ function RegistrantPanel({ reg, onClose }: { reg: Registrant; onClose: () => voi
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 40 }}
-            className="fixed right-0 top-0 h-full w-full max-w-sm bg-white border-l border-gray-200 shadow-2xl z-50 flex flex-col"
+            className="fixed right-0 top-0 h-full w-[95vw] max-w-sm bg-white border-l border-gray-200 shadow-2xl z-50 flex flex-col sm:top-0 sm:h-full"
         >
             {/* Header */}
             <div className="p-6 border-b border-gray-100 flex items-start justify-between">
@@ -208,7 +208,7 @@ function GroupRow({ group, onSelect }: { group: GroupData; onSelect: (r: Registr
             {/* Group header */}
             <button
                 onClick={() => setOpen(v => !v)}
-                className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 transition-all text-left"
+                className="w-full flex items-center gap-3 p-3 md:p-4 hover:bg-gray-50 transition-all text-left"
             >
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
                     <span className="text-sm font-black text-[#1a5490]">{(group.name[0] || '?').toUpperCase()}</span>
@@ -255,7 +255,7 @@ function GroupRow({ group, onSelect }: { group: GroupData; onSelect: (r: Registr
                                 <button
                                     key={reg.id || i}
                                     onClick={() => onSelect(reg)}
-                                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50/40 transition-all text-left group/row"
+                                    className="w-full flex items-center gap-2 px-3 py-2 md:px-4 md:py-3 hover:bg-blue-50/40 transition-all text-left group/row"
                                 >
                                     <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-[10px] font-black text-gray-500 group-hover/row:bg-[#1a5490] group-hover/row:text-white transition-all">
                                         {(reg.full_name[0] || '?').toUpperCase()}
@@ -445,7 +445,7 @@ export default function RegistrantsView() {
 
             {/* Stats */}
             {!loading && registrants.length > 0 && (
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
                     <StatCard label="Total Delegates" value={registrants.length.toLocaleString()} icon={<Users size={18} />} color="#1a5490" />
                     <StatCard label="Total Revenue" value={formatAmount(totalAmount)} icon={<DollarSign size={18} />} color="#10b981" />
                     <DistrictStatCard registrants={registrants} type="dcc" />

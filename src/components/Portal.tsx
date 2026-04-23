@@ -292,13 +292,13 @@ function GivingSection({ onBack }: { onBack: () => void }) {
   return (
     <div className="space-y-8 pb-20">
       {/* Hero banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a5490] via-[#1e4d8c] to-[#0f3460] p-8 md:p-10 text-white">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a5490] via-[#1e4d8c] to-[#0f3460] p-4 md:p-8 text-white">
         <div className="absolute inset-0 opacity-[0.06]"
           style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
         <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="relative z-10 max-w-2xl">
           <div className="text-[10px] uppercase tracking-[8px] text-white/60 font-black mb-3">60th Diamond Jubilee</div>
-          <h2 className="text-3xl md:text-4xl font-serif italic text-white leading-tight mb-3">
+          <h2 className="text-xl md:text-4xl font-serif italic text-white leading-tight mb-2">
             Invest in the Legacy
           </h2>
           <p className="text-white/70 text-sm leading-relaxed max-w-lg">
@@ -311,10 +311,10 @@ function GivingSection({ onBack }: { onBack: () => void }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 md:gap-6">
         {/* Bank details — main card */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm space-y-4">
+          <div className="bg-white border border-gray-100 rounded-2xl p-4 md:p-6 shadow-sm space-y-3 md:space-y-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2.5 bg-blue-50 rounded-xl text-[#1a5490]">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -478,7 +478,7 @@ function GallerySection() {
       </div>
 
       {/* Masonry grid — 3 columns */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-0.5 md:gap-1">
         {cols.map((col, ci) => (
           <div key={ci} className="flex flex-col gap-1">
             {col.map((src, ri) => {
@@ -595,7 +595,7 @@ function GallerySection() {
             />
 
             {/* Thumbnail strip */}
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 px-4 overflow-x-auto">
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1 px-2 overflow-x-auto">
               {GALLERY_IMAGES.map((src, i) => (
                 <button
                   key={i}
@@ -926,21 +926,24 @@ export default function Portal({ onBack, onInvest }: PortalProps) {
       </main>
 
       {/* ── Mobile bottom nav bar ── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[400] bg-white border-t border-gray-200 flex items-center justify-around px-1 py-1 shadow-lg">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[400] bg-white border-t border-gray-200 flex items-center justify-around px-0.5 py-1 shadow-lg">
         {navItems.map((item) => (
           <button key={item.id} onClick={() => setActiveSegment(item.id)}
-            className={`flex flex-col items-center gap-0.5 px-1.5 py-1.5 rounded-xl transition-all flex-1 ${activeSegment === item.id ? "text-[#1a5490]" : "text-gray-400"
+            className={`flex flex-col items-center gap-0 px-1 py-1.5 rounded-xl transition-all flex-1 min-w-0 ${activeSegment === item.id ? "text-[#1a5490]" : "text-gray-400"
               }`}
           >
-            <div className={`p-1.5 rounded-lg transition-all ${activeSegment === item.id ? "bg-blue-50" : ""}`}>
-              {item.icon}
+            <div className={`p-1 rounded-lg transition-all ${activeSegment === item.id ? "bg-blue-50" : ""}`}>
+              {/* Smaller icons on very small screens */}
+              <span className="block [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-5 sm:[&>svg]:h-5">{item.icon}</span>
             </div>
-            <span className="text-[7px] font-bold uppercase tracking-wide truncate w-full text-center">{item.label}</span>
+            <span className="text-[6px] sm:text-[7px] font-bold uppercase tracking-wide truncate w-full text-center leading-tight">{item.label}</span>
           </button>
         ))}
-        <button onClick={onBack} className="flex flex-col items-center gap-0.5 px-1.5 py-1.5 rounded-xl text-gray-400 flex-1">
-          <div className="p-1.5 rounded-lg"><ExternalLink size={20} /></div>
-          <span className="text-[7px] font-bold uppercase tracking-wide">Back</span>
+        <button onClick={onBack} className="flex flex-col items-center gap-0 px-1 py-1.5 rounded-xl text-gray-400 flex-1 min-w-0">
+          <div className="p-1 rounded-lg">
+            <span className="block [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-5 sm:[&>svg]:h-5"><ExternalLink size={20} /></span>
+          </div>
+          <span className="text-[6px] sm:text-[7px] font-bold uppercase tracking-wide">Back</span>
         </button>
       </nav>
 

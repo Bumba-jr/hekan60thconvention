@@ -72,7 +72,7 @@ export default function App() {
             className="text-center"
           >
             <div className="text-[10px] md:text-[14px] font-serif tracking-[4px] uppercase text-[#1a5490] mb-2">The United Church of Christ in Nigeria</div>
-            <div className="text-6xl md:text-8xl font-black tracking-[8px] logo-acronym-gradient">HEKAN</div>
+            <div className="text-4xl md:text-8xl font-black tracking-[4px] md:tracking-[8px] logo-acronym-gradient">HEKAN</div>
             <div className="text-[10px] md:text-[12px] text-gray-500 italic mt-2">Hadaddiyar Ekklesiyar Kristi A Nigeria</div>
           </motion.div>
         </div>
@@ -96,7 +96,7 @@ export default function App() {
             initial={{ opacity: 0, scale: 3, filter: "blur(10px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-            className="text-8xl md:text-[140px] font-black leading-none text-artistic-diamond text-glow-diamond"
+            className="text-5xl md:text-[140px] font-black leading-none text-artistic-diamond text-glow-diamond"
           >
             60th
           </motion.div>
@@ -154,7 +154,7 @@ export default function App() {
             transition={{ duration: 1 }}
             className="flex-shrink-0"
           >
-            <div className="w-36 h-44 md:w-48 md:h-60 rounded-2xl overflow-hidden border-4 border-white/80 shadow-2xl">
+            <div className="w-24 h-32 md:w-48 md:h-60 rounded-2xl overflow-hidden border-4 border-white/80 shadow-2xl">
               <img
                 src="/president.jpg"
                 alt="Rev. (Dr.) Amos G. Kiri"
@@ -170,7 +170,7 @@ export default function App() {
             className="info-group-border pl-6 text-left border-l-2 border-[#1a5490]"
           >
             <span className="text-[10px] uppercase tracking-[2px] text-[#1a5490] block mb-2 font-black">Chief Host</span>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-2">Rev. (Dr.) Amos G. Kiri</h2>
+            <h2 className="text-xl md:text-5xl font-bold text-gray-900 mb-2">Rev. (Dr.) Amos G. Kiri</h2>
             <div className="text-sm md:text-base text-gray-500">President, HEKAN</div>
             <div className="text-sm md:text-base text-[#1a5490] italic mt-2">Valedictory Address</div>
           </motion.div>
@@ -182,20 +182,20 @@ export default function App() {
       id: 5,
       title: "Speakers",
       content: (
-        <div className="w-full max-w-6xl px-4 md:px-8 space-y-6">
+        <div className="w-full max-w-6xl px-3 md:px-8 space-y-4">
           {/* Guest Speaker */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-5 info-group-border pl-5 border-l-2 border-[#1a5490]"
           >
-            <div className="w-14 h-16 md:w-16 md:h-20 rounded-xl overflow-hidden border-2 border-[#1a5490]/30 flex-shrink-0 shadow-md">
+            <div className="w-10 h-12 md:w-16 md:h-20 rounded-xl overflow-hidden border-2 border-[#1a5490]/30 flex-shrink-0 shadow-md">
               <img src="/dr isaiah.jpg" alt="Rev. Dr. Isaiah Jirape Magaji"
                 className="w-full h-full object-cover object-top" />
             </div>
             <div>
               <span className="text-[10px] uppercase tracking-[2px] text-[#1a5490] block mb-1 font-black">Guest Speaker</span>
-              <h2 className="text-xl md:text-3xl font-bold text-gray-900">Rev. Dr. Isaiah Jirape Magaji</h2>
+              <h2 className="text-base md:text-3xl font-bold text-gray-900">Rev. Dr. Isaiah Jirape Magaji</h2>
               <div className="text-sm text-gray-500">President, CRC-N</div>
             </div>
           </motion.div>
@@ -208,7 +208,7 @@ export default function App() {
             className="border-l-2 border-[#1a5490]/30 pl-5"
           >
             <span className="text-[10px] uppercase tracking-[2px] text-[#1a5490] block mb-3 font-black">Guest Teachers</span>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-2 md:gap-4">
               {[
                 { img: '/dr enoch.jpg', name: 'Rev. Dr. Enoch Adamu', detail: 'Regional Trauma Lead, Africa Services' },
                 { img: '/dr abdulra.jpg', name: "Dr. Abdulra'uf Aliyu", detail: 'Senior Policy Advisor, ACTG' },
@@ -219,9 +219,9 @@ export default function App() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + i * 0.15 }}
-                  className="flex items-center gap-3 bg-white/70 backdrop-blur-sm rounded-xl px-3 py-2 shadow-sm border border-gray-100"
+                  className="flex items-center gap-2 bg-white/70 backdrop-blur-sm rounded-xl px-2 py-1.5 md:px-3 md:py-2 shadow-sm border border-gray-100"
                 >
-                  <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
                     <img src={t.img} alt={t.name}
                       className="w-full h-full object-cover object-top" />
                   </div>
@@ -480,14 +480,17 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/30 backdrop-blur-lg"
+            className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center sm:p-4 bg-black/30 backdrop-blur-lg"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 30 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 30 }}
-              className="w-full max-w-xl bg-white border border-gray-200 p-8 md:p-10 relative shadow-2xl rounded-2xl"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="w-full max-w-xl bg-white border border-gray-200 p-4 md:p-8 relative shadow-2xl rounded-t-2xl sm:rounded-2xl"
             >
+              {/* Drag handle — visible on mobile */}
+              <div className="sm:hidden w-10 h-1 bg-gray-200 rounded-full mx-auto mb-4" />
               <button
                 onClick={() => setIsDonationModalOpen(false)}
                 className="absolute top-5 right-5 text-gray-400 hover:text-gray-700 transition-colors"
@@ -511,7 +514,7 @@ export default function App() {
                   <div className="p-4 border border-gray-200 bg-white rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 group hover:border-[#1a5490]/40 transition-all shadow-sm">
                     <div className="text-center md:text-left">
                       <div className="text-[10px] text-[#1a5490] uppercase tracking-[2px] font-black mb-1">Account Number</div>
-                      <div className="text-2xl font-black text-gray-900 tracking-[4px] group-hover:text-[#1a5490] transition-colors">{bankDetails.accountNumber}</div>
+                      <div className="text-lg md:text-2xl font-black text-gray-900 tracking-[2px] md:tracking-[4px] group-hover:text-[#1a5490] transition-colors">{bankDetails.accountNumber}</div>
                     </div>
                     <button
                       onClick={handleCopy}

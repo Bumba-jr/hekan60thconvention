@@ -86,13 +86,13 @@ function Kpi({ label, value, sub, icon, color, delay = 0 }: {
         <motion.div
             initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay, duration: 0.35, ease: 'easeOut' }}
-            className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group"
+            className="bg-white border border-gray-100 rounded-2xl p-3 md:p-5 shadow-sm hover:shadow-md transition-all group"
         >
             <div className="p-2.5 rounded-xl w-fit mb-3 transition-all group-hover:scale-110"
                 style={{ background: `${color}18`, color }}>
                 {icon}
             </div>
-            <div className="text-[26px] font-black text-gray-900 leading-none tracking-tight">{value}</div>
+            <div className="text-xl md:text-[26px] font-black text-gray-900 leading-none tracking-tight">{value}</div>
             <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-1.5">{label}</div>
             {sub && <div className="text-[10px] text-gray-400 mt-0.5 truncate">{sub}</div>}
         </motion.div>
@@ -104,7 +104,7 @@ function Card({ title, sub, children, className = '' }: {
     title: string; sub?: string; children: React.ReactNode; className?: string;
 }) {
     return (
-        <div className={`bg-white border border-gray-100 rounded-2xl p-6 shadow-sm ${className}`}>
+        <div className={`bg-white border border-gray-100 rounded-2xl p-3 md:p-6 shadow-sm ${className}`}>
             <div className="mb-5">
                 <h3 className="text-sm font-black text-gray-900">{title}</h3>
                 {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
@@ -129,7 +129,7 @@ function Board({ data }: { data: { name: string; value: number }[] }) {
                         </span>
                         <span className="text-xs font-semibold text-gray-800 flex-1 truncate">{d.name}</span>
                         <div className="flex items-center gap-2 flex-shrink-0">
-                            <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="w-12 md:w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                 <div className="h-full rounded-full" style={{ width: `${pct}%`, background: C[i % C.length] }} />
                             </div>
                             <span className="text-xs font-black text-gray-900 w-6 text-right">{d.value}</span>
@@ -720,7 +720,7 @@ function DCCComparison({ rows }: { rows: Registrant[] }) {
             </div>
 
             {/* Selectors */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
+            <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 md:gap-3 mb-4">
                 <div>
                     <div className="text-[10px] font-black uppercase tracking-widest text-[#1a5490] mb-1.5 flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-[#1a5490]" /> {typeLabel} A
@@ -742,7 +742,7 @@ function DCCComparison({ rows }: { rows: Registrant[] }) {
             </div>
 
             {/* Name badges */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
+            <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 md:gap-3 mb-4">
                 {[{ d: A, color: '#1a5490', bg: '#eff6ff' }, { d: B, color: '#6366f1', bg: '#eef2ff' }].map(({ d, color, bg }, i) => (
                     <div key={i} className="p-3 rounded-xl text-center" style={{ background: bg }}>
                         <div className="text-xs font-black truncate" style={{ color }}>{d.name}</div>
@@ -905,7 +905,7 @@ export default function AnalyticsView() {
             </div>
 
             {/* ── KPIs ── */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
                 <Kpi label="Total Delegates" value={rows.length.toLocaleString()}
                     icon={<Users size={18} />} color={BLUE} delay={0} />
                 <Kpi label="Total Revenue" value={naira(totalAmt)}

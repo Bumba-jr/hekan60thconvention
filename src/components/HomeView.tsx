@@ -120,7 +120,7 @@ function DistrictCard({ dccList, lccList, dccCount, lccCount }: {
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.14 }}
             className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group overflow-hidden flex flex-col"
-            style={{ height: 180 }}
+            style={{ minHeight: 160 }}
         >
             {/* icon + toggle */}
             <div className="flex justify-between items-start mb-4">
@@ -234,7 +234,7 @@ export default function HomeView({
 
     // ── Section 1 — Hero ───────────────────────────────────────────────────────
     const Hero = (
-        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a5490] via-[#1e4d8c] to-[#0f3460] p-8 md:p-12 text-white">
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a5490] via-[#1e4d8c] to-[#0f3460] p-4 md:p-8 text-white">
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-[0.06]"
                 style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
@@ -251,7 +251,7 @@ export default function HomeView({
                         <div className="text-[11px] font-bold tracking-[4px] uppercase text-white/60 mb-2">
                             The United Church of Christ in Nigeria
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-none">
+                        <h1 className="text-2xl md:text-6xl font-black tracking-tight leading-none">
                             HEKAN
                         </h1>
                         <p className="text-white/70 text-sm mt-2 italic">Hadaddiyar Ekklesiyar Kristi A Nigeria</p>
@@ -283,7 +283,7 @@ export default function HomeView({
                             {countdown.past ? 'Convention Completed' : 'Convention Begins In'}
                         </p>
                         {!countdown.past ? (
-                            <div className="grid grid-cols-4 gap-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
                                 {[
                                     { v: countdown.days, l: 'Days' },
                                     { v: countdown.hours, l: 'Hours' },
@@ -310,11 +310,11 @@ export default function HomeView({
     // ── Section 2 — Stats ──────────────────────────────────────────────────────
     const Stats = (
         <Section id="stats" label="Convention at a Glance">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
                 {/* Delegates */}
                 <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0 }}
-                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ height: 180 }}>
+                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ minHeight: 160 }}>
                     <div className="flex justify-between items-start mb-4">
                         <div className="p-2.5 rounded-xl bg-blue-50 text-[#1a5490] transition-all group-hover:scale-110"><Users size={20} /></div>
                         <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-[#1a5490]">Live</span>
@@ -332,7 +332,7 @@ export default function HomeView({
                 {/* Revenue */}
                 <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.07 }}
-                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ height: 180 }}>
+                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ minHeight: 160 }}>
                     <div className="flex justify-between items-start mb-4">
                         <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 transition-all group-hover:scale-110"><DollarSign size={20} /></div>
                         <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">Live</span>
@@ -353,7 +353,7 @@ export default function HomeView({
                 {/* Days */}
                 <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.21 }}
-                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ height: 180 }}>
+                    className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col overflow-hidden" style={{ minHeight: 160 }}>
                     <div className="flex justify-between items-start mb-4">
                         <div className="p-2.5 rounded-xl bg-amber-50 text-amber-500 transition-all group-hover:scale-110"><Clock size={20} /></div>
                         <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-amber-500">
@@ -382,7 +382,7 @@ export default function HomeView({
                 {/* Chief Host */}
                 <div className="md:col-span-2 lg:col-span-1 bg-gradient-to-br from-[#1a5490] to-[#0f3460] rounded-2xl p-6 text-white shadow-lg">
                     <div className="text-[10px] uppercase tracking-[4px] text-white/60 font-black mb-4">Chief Host</div>
-                    <div className="w-20 h-24 rounded-2xl overflow-hidden mb-4 border-2 border-white/30">
+                    <div className="w-16 h-20 md:w-20 md:h-24 rounded-2xl overflow-hidden mb-4 border-2 border-white/30">
                         <img src="/president.jpg" alt="Rev. (Dr.) Amos G. Kiri"
                             className="w-full h-full object-cover object-top" />
                     </div>
@@ -477,7 +477,7 @@ export default function HomeView({
     // ── Section 5 — Legacy Projects ────────────────────────────────────────────
     const Legacy = (
         <Section id="legacy" label="Legacy Projects">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                 {[
                     { title: 'National Secretariat Building', sub: 'Grand dedication — September 2026', progress: 78, target: '₦50M', icon: <Landmark size={18} />, color: '#1a5490', urgent: true },
                     { title: 'Gampu Clinic Expansion', sub: 'Taraba State · Sunlight Community Church partnership', progress: 85, target: '₦5.0M', icon: <Stethoscope size={18} />, color: '#10b981', urgent: false },
@@ -531,7 +531,7 @@ export default function HomeView({
     // ── Section 6 — Mission Footprint ──────────────────────────────────────────
     const Mission = (
         <Section id="mission" label="Mission Footprint">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
                 {[
                     { label: 'Active States', value: '4', sub: 'Kaduna · Niger · Taraba · Kano', icon: <MapPin size={18} />, color: '#1a5490' },
                     { label: 'Clinics Supported', value: '14', sub: 'Rural & urban health facilities', icon: <Stethoscope size={18} />, color: '#10b981' },
@@ -550,7 +550,7 @@ export default function HomeView({
                     </motion.div>
                 ))}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                 {[
                     { state: 'Kaduna', detail: 'National Secretariat · HEKAN Clinic · HQ', status: 'Operational', color: '#10b981' },
                     { state: 'Niger', detail: 'Leapu Secondary School · SabonGarin DanAuta Clinic', status: 'Expanding', color: '#1a5490' },
@@ -577,7 +577,7 @@ export default function HomeView({
     // ── Section 7 — Quick Links ────────────────────────────────────────────────
     const QuickLinks = (
         <Section id="quicklinks" label="Quick Navigation">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-1.5 md:gap-3">
                 {[
                     { id: 'dashboard', label: 'Registrants', icon: <Users size={20} />, color: '#1a5490', bg: '#eff6ff' },
                     { id: 'analytics', label: 'Analytics', icon: <BarChart3 size={20} />, color: '#6366f1', bg: '#eef2ff' },

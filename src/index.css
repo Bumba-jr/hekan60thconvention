@@ -45,6 +45,12 @@
       radial-gradient(circle at 50% 0%, #eef4fb 0%, transparent 60%),
       radial-gradient(circle at 90% 90%, #f0f7ff 0%, transparent 50%);
   }
+
+  /* Prevent horizontal overflow on very small screens */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .cinematic-overlay {
