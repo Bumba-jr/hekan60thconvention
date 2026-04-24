@@ -36,14 +36,21 @@ function useCountdown(target: Date) {
 }
 
 // ── Section wrapper ───────────────────────────────────────────────────────────
-function Section({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
-    const [hovered, setHovered] = useState(false);
+function Section({ id, label, children, externalHovered }: {
+    id: string;
+    label: string;
+    children: React.ReactNode;
+    externalHovered?: boolean;
+}) {
+    const [selfHovered, setSelfHovered] = useState(false);
+    const hovered = externalHovered || selfHovered;
+
     return (
         <section id={id} className="space-y-4">
             <div
                 className="flex items-center gap-3 cursor-default"
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
+                onMouseEnter={() => setSelfHovered(true)}
+                onMouseLeave={() => setSelfHovered(false)}
             >
                 <motion.div
                     animate={{ scaleX: hovered ? 1.05 : 1, opacity: hovered ? 0.6 : 1 }}
@@ -52,10 +59,10 @@ function Section({ id, label, children }: { id: string; label: string; children:
                 />
                 <motion.span
                     animate={{
-                        letterSpacing: hovered ? '0.18em' : '0.06em',
+                        letterSpacing: hovered ? '0.22em' : '0.06em',
                         color: hovered ? '#1a5490' : '#9ca3af',
                     }}
-                    transition={{ duration: 0.35, ease: 'easeOut' }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
                     className="text-[10px] uppercase font-black flex-shrink-0"
                     style={{ letterSpacing: '0.06em', color: '#9ca3af' }}
                 >
@@ -350,9 +357,15 @@ export default function HomeView({
     );
 
     // ── Section 3 — Key People ─────────────────────────────────────────────────
+    const [peopleHovered, setPeopleHovered] = useState(false);
+
     const People = (
-        <Section id="people" label="Key People">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Section id="people" label="Key People" externalHovered={peopleHovered}>
+            <div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                onMouseEnter={() => setPeopleHovered(true)}
+                onMouseLeave={() => setPeopleHovered(false)}
+            >
                 {/* Chief Host */}
                 <div className="md:col-span-2 lg:col-span-1 bg-gradient-to-br from-[#1a5490] to-[#0f3460] rounded-2xl p-6 text-white shadow-lg">
                     <div className="text-[10px] uppercase tracking-[4px] text-white/60 font-black mb-4">Chief Host</div>
