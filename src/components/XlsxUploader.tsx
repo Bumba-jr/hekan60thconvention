@@ -9,7 +9,8 @@ interface Props {
 }
 
 // Map flexible column headers from the XLSX to our schema
-// paymentOverride: if provided, forces the payment_info field (used per-sheet)
+// paymentOverride: if provided, forces the payment_info field (online reg — all POS/Bank)
+// For manual reg, pass no override — let the row columns decide
 function mapRow(headers: string[], row: any[], paymentOverride?: string): Registrant | null {
     const get = (keys: string[]) => {
         for (const k of keys) {
@@ -22,18 +23,56 @@ function mapRow(headers: string[], row: any[], paymentOverride?: string): Regist
     };
 
     const fullName = get(['full name', 'name', 'fullname']);
-    if (!fullName) return null; // skip empty rows
+    if (!fullName) return null;
 
-    // Skip summary/footer rows — "TOTAL", "TOTAL AMOUNT", "GRAND TOTAL", etc.
+    // Skip summary/footer rows
     const nameLower = fullName.toLowerCase().trim();
     if (
-        nameLower === 'total' ||
-        nameLower === 'total amount' ||
-        nameLower === 'grand total' ||
-        nameLower === 'subtotal' ||
-        nameLower.startsWith('total ') ||
-        nameLower.endsWith(' total')
+        nameLower === 'total' || nameLower === 'total amount' || nameLower === 'grand total' ||
+        nameLower === 'subtotal' || nameLower.startsWith('total ') || nameLower.endsWith(' total')
     ) return null;
+
+    // ── Payment detection for manual reg sheet ────────────────────────────────
+    // Manual reg has two separate columns:
+    //   "Cash" column        — contains "Cash" or "N/A"
+    //   "Bank (POS) Transfer" column — contains "Bank Transfer" or "N/A"
+    // We check both columns to determine the actual payment method.
+    let payment_info: string;
+
+    if (paymentOverride) {
+        // Online reg — all rows are POS/Bank Transfer
+        payment_info = paymentOverride;
+    } else {
+        // Manual reg — read the two payment columns
+        const cashIdx = headers.findIndex(h => {
+            const hl = h.toLowerCase();
+            return hl === 'cash' || hl.includes('cash');
+        });
+        const bankIdx = headers.findIndex(h => {
+            const hl = h.toLowerCase();
+            return (hl.includes('bank') || hl.includes('pos') || hl.includes('transfer')) && !hl.includes('cash');
+        });
+
+        const cashVal = cashIdx >= 0 ? String(row[cashIdx] ?? '').trim().toLowerCase() : '';
+        const bankVal = bankIdx >= 0 ? String(row[bankIdx] ?? '').trim().toLowerCase() : '';
+
+        // If cash column has a real value (not empty / N/A / -) → Cash
+        const isCash = cashVal && cashVal !== 'n/a' && cashVal !== '-' && cashVal !== '0';
+        // If bank column has a real value → POS / Bank Transfer
+        const isBank = bankVal && bankVal !== 'n/a' && bankVal !== '-' && bankVal !== '0';
+
+        if (isCash && !isBank) {
+            payment_info = 'Cash';
+        } else if (isBank && !isCash) {
+            payment_info = 'POS / Bank Transfer';
+        } else if (isBank && isCash) {
+            // Both filled — prefer bank transfer (edge case)
+            payment_info = 'POS / Bank Transfer';
+        } else {
+            // Neither — fall back to generic payment column
+            payment_info = get(['payment', 'receipt', 'transaction']) || 'Unknown';
+        }
+    }
 
     return {
         s_no: get(['s/no', 'sno', 's_no', 'serial', 'no.']),
@@ -43,18 +82,20 @@ function mapRow(headers: string[], row: any[], paymentOverride?: string): Regist
         lcc: get(['lcc', 'local']),
         phone: get(['phone', 'mobile', 'tel', 'contact']),
         email: get(['email', 'e-mail', 'mail']),
-        // Use override if provided (sheet-level), otherwise read from column
-        payment_info: paymentOverride ?? get(['payment', 'receipt', 'transaction', 'bank', 'pos']),
+        payment_info,
         amount: get(['amount', 'fee', 'paid']),
     };
 }
 
-// Detect payment method from sheet name
-function sheetPaymentMethod(sheetName: string): string {
+// Detect sheet type from name
+function isOnlineSheet(sheetName: string): boolean {
     const n = sheetName.toLowerCase();
-    if (n.includes('online') || n.includes('transfer') || n.includes('pos')) return 'POS / Bank Transfer';
-    if (n.includes('manual') || n.includes('cash')) return 'Cash';
-    return ''; // unknown — let column value decide
+    return n.includes('online') || n.includes('transfer') || n.includes('pos');
+}
+
+function isManualSheet(sheetName: string): boolean {
+    const n = sheetName.toLowerCase();
+    return n.includes('manual') || n.includes('cash');
 }
 
 // Parse one worksheet into rows
@@ -63,7 +104,7 @@ function parseSheet(wb: XLSX.WorkBook, sheetName: string): Registrant[] {
     const raw: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
     if (raw.length < 2) return [];
 
-    // Find header row (first row containing "name", "s/no", or "dcc")
+    // Find header row
     let headerIdx = 0;
     for (let i = 0; i < Math.min(raw.length, 6); i++) {
         const joined = raw[i].join(' ').toLowerCase();
@@ -74,7 +115,10 @@ function parseSheet(wb: XLSX.WorkBook, sheetName: string): Registrant[] {
     }
 
     const headers = raw[headerIdx].map((h: any) => String(h).trim());
-    const paymentOverride = sheetPaymentMethod(sheetName) || undefined;
+
+    // Online reg → force POS/Bank Transfer for every row
+    // Manual reg → no override, let mapRow read the Cash/Bank columns per row
+    const paymentOverride = isOnlineSheet(sheetName) ? 'POS / Bank Transfer' : undefined;
 
     return raw
         .slice(headerIdx + 1)
@@ -116,7 +160,11 @@ export default function XlsxUploader({ onSuccess }: Props) {
                     const rows = parseSheet(wb, sheetName);
                     if (rows.length > 0) {
                         allRows.push(...rows);
-                        const method = sheetPaymentMethod(sheetName) || 'mixed';
+                        const method = isOnlineSheet(sheetName)
+                            ? 'POS / Bank Transfer'
+                            : isManualSheet(sheetName)
+                                ? 'Cash + POS/Bank (per row)'
+                                : 'mixed';
                         sheetSummary.push(`"${sheetName}" → ${rows.length} rows (${method})`);
                     }
                 }
