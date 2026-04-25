@@ -106,27 +106,43 @@ function DistrictStatCard({ registrants, type }: {
                         <motion.div
                             key={`${type}-${idx}`}
                             style={{ position: 'absolute', inset: 0 }}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
+                            // DCC: slides in from right, exits left
+                            // LCC: slides in from bottom, exits top
+                            initial={type === 'dcc'
+                                ? { opacity: 0, x: 16 }
+                                : { opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, x: 0, y: 0 }}
+                            exit={type === 'dcc'
+                                ? { opacity: 0, x: -16 }
+                                : { opacity: 0, y: -10 }}
+                            transition={{ duration: type === 'dcc' ? 0.35 : 0.28, ease: 'easeOut' }}
                         >
-                            {/* Name — slides in first */}
+                            {/* Name — DCC: fades up, LCC: fades in from right */}
                             <motion.div
-                                initial={{ opacity: 0, x: -8 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: 0.05 }}
+                                initial={type === 'dcc'
+                                    ? { opacity: 0, y: 6 }
+                                    : { opacity: 0, x: 8 }}
+                                animate={{ opacity: 1, x: 0, y: 0 }}
+                                transition={{
+                                    duration: 0.3,
+                                    delay: type === 'dcc' ? 0.08 : 0.05,
+                                }}
                                 className="flex items-center justify-between gap-2 mb-1"
                             >
                                 <span className="text-[10px] font-bold text-gray-700 truncate flex-1">{current.name}</span>
                                 <span className="text-[9px] text-gray-400 flex-shrink-0">{idx + 1}/{total}</span>
                             </motion.div>
 
-                            {/* Stats — slides in second */}
+                            {/* Stats — DCC: slides from right, LCC: fades up */}
                             <motion.div
-                                initial={{ opacity: 0, x: -8 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: 0.15 }}
+                                initial={type === 'dcc'
+                                    ? { opacity: 0, x: 10 }
+                                    : { opacity: 0, y: 6 }}
+                                animate={{ opacity: 1, x: 0, y: 0 }}
+                                transition={{
+                                    duration: 0.3,
+                                    delay: type === 'dcc' ? 0.18 : 0.13,
+                                }}
                                 className="flex items-center gap-3 mb-1.5"
                             >
                                 <span className="text-[10px] font-black" style={{ color }}>
@@ -136,18 +152,23 @@ function DistrictStatCard({ registrants, type }: {
                                 <span className="text-[10px] text-emerald-600 font-bold">{formatAmount(current.amount)}</span>
                             </motion.div>
 
-                            {/* Bar — grows in last */}
+                            {/* Bar — DCC: grows from left, LCC: grows from right */}
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ duration: 0.2, delay: 0.25 }}
+                                transition={{ delay: type === 'dcc' ? 0.28 : 0.2 }}
                                 className="h-1 bg-gray-100 rounded-full overflow-hidden"
+                                style={{ direction: type === 'lcc' ? 'rtl' : 'ltr' }}
                             >
                                 <motion.div
                                     key={`bar-${type}-${idx}`}
                                     initial={{ width: 0 }}
                                     animate={{ width: `${Math.round((current.count / maxCount) * 100)}%` }}
-                                    transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
+                                    transition={{
+                                        duration: type === 'dcc' ? 0.55 : 0.45,
+                                        delay: type === 'dcc' ? 0.32 : 0.24,
+                                        ease: 'easeOut',
+                                    }}
                                     className="h-full rounded-full" style={{ background: color }}
                                 />
                             </motion.div>
