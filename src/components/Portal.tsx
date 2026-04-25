@@ -698,9 +698,25 @@ export default function Portal({ onBack, onInvest }: PortalProps) {
             </span>
             <span className="text-gray-200 font-light sm:hidden">|</span>
             <span className="text-[10px] font-semibold text-gray-400 sm:hidden flex-shrink-0">HEKAN 60th</span>
-            <span className="hidden sm:inline text-[10px] uppercase tracking-[3px] text-[#1a5490] font-black">Mission Control</span>
+            <span className="hidden sm:inline text-[10px] uppercase tracking-[3px] text-[#1a5490] font-black">
+              {activeSegment === 'home' && 'Mission Control'}
+              {activeSegment === 'dashboard' && 'Registrants'}
+              {activeSegment === 'analytics' && 'Analytics'}
+              {activeSegment === 'schedule' && 'Event Schedule'}
+              {activeSegment === 'map' && 'Mission Footprint'}
+              {activeSegment === 'gallery' && 'Anniversary Archive'}
+              {activeSegment === 'invest' && 'Giving'}
+            </span>
             <span className="hidden md:inline text-gray-200 mx-1">|</span>
-            <span className="hidden md:inline text-xs font-semibold text-gray-500 truncate">60th Jubilee Anniversary Portal</span>
+            <span className="hidden md:inline text-xs font-semibold text-gray-500 truncate">
+              {activeSegment === 'home' && 'HEKAN 60th Diamond Jubilee'}
+              {activeSegment === 'dashboard' && 'Convention Registrants · Live Data'}
+              {activeSegment === 'analytics' && 'Registration Insights & Charts'}
+              {activeSegment === 'schedule' && 'April 7–12, 2026 · Kaduna'}
+              {activeSegment === 'map' && 'Active Stations Across Nigeria'}
+              {activeSegment === 'gallery' && 'Legacy Visuals · 60th Convention'}
+              {activeSegment === 'invest' && 'Support the Legacy · First Bank'}
+            </span>
           </div>
 
           {/* Right: countdown (lg only) + invest button */}
