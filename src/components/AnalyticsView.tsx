@@ -720,7 +720,7 @@ function DCCComparison({ rows }: { rows: Registrant[] }) {
             </div>
 
             {/* Selectors */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 md:gap-3 mb-4">
+            <div className="grid grid-cols-2 gap-2 md:gap-3 mb-4">
                 <div>
                     <div className="text-[10px] font-black uppercase tracking-widest text-[#1a5490] mb-1.5 flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-[#1a5490]" /> {typeLabel} A
