@@ -33,43 +33,48 @@ function mapRow(headers: string[], row: any[], paymentOverride?: string): Regist
     ) return null;
 
     // ── Payment detection for manual reg sheet ────────────────────────────────
-    // Manual reg has two separate columns:
-    //   "Cash" column        — contains "Cash" or "N/A"
-    //   "Bank (POS) Transfer" column — contains "Bank Transfer" or "N/A"
-    // We check both columns to determine the actual payment method.
+    // Manual reg columns: "Cash" and "Bank (POS) Transfer"
+    // Online reg: paymentOverride forces "POS / Bank Transfer" for all rows
     let payment_info: string;
 
     if (paymentOverride) {
-        // Online reg — all rows are POS/Bank Transfer
         payment_info = paymentOverride;
     } else {
-        // Manual reg — read the two payment columns
-        const cashIdx = headers.findIndex(h => {
-            const hl = h.toLowerCase();
-            return hl === 'cash' || hl.includes('cash');
-        });
-        const bankIdx = headers.findIndex(h => {
-            const hl = h.toLowerCase();
-            return (hl.includes('bank') || hl.includes('pos') || hl.includes('transfer')) && !hl.includes('cash');
-        });
+        // Find "Cash" column — exact match first, then partial
+        const cashIdx = (() => {
+            const exact = headers.findIndex(h => h.trim().toLowerCase() === 'cash');
+            if (exact >= 0) return exact;
+            return headers.findIndex(h => h.trim().toLowerCase().startsWith('cash'));
+        })();
 
-        const cashVal = cashIdx >= 0 ? String(row[cashIdx] ?? '').trim().toLowerCase() : '';
-        const bankVal = bankIdx >= 0 ? String(row[bankIdx] ?? '').trim().toLowerCase() : '';
+        // Find "Bank (POS) Transfer" column — must contain "bank" and ("pos" or "transfer")
+        const bankIdx = (() => {
+            const exact = headers.findIndex(h => h.trim().toLowerCase() === 'bank (pos) transfer');
+            if (exact >= 0) return exact;
+            return headers.findIndex(h => {
+                const hl = h.trim().toLowerCase();
+                return hl.includes('bank') && (hl.includes('pos') || hl.includes('transfer'));
+            });
+        })();
 
-        // If cash column has a real value (not empty / N/A / -) → Cash
-        const isCash = cashVal && cashVal !== 'n/a' && cashVal !== '-' && cashVal !== '0';
-        // If bank column has a real value → POS / Bank Transfer
-        const isBank = bankVal && bankVal !== 'n/a' && bankVal !== '-' && bankVal !== '0';
+        const hasValue = (v: string) => {
+            const vl = v.trim().toLowerCase();
+            return vl !== '' && vl !== 'n/a' && vl !== 'na' && vl !== '-' && vl !== '0' && vl !== 'nil';
+        };
+
+        const cashVal = cashIdx >= 0 ? String(row[cashIdx] ?? '') : '';
+        const bankVal = bankIdx >= 0 ? String(row[bankIdx] ?? '') : '';
+
+        const isCash = hasValue(cashVal);
+        const isBank = hasValue(bankVal);
 
         if (isCash && !isBank) {
             payment_info = 'Cash';
-        } else if (isBank && !isCash) {
-            payment_info = 'POS / Bank Transfer';
-        } else if (isBank && isCash) {
-            // Both filled — prefer bank transfer (edge case)
+        } else if (isBank) {
+            // Bank transfer (whether or not cash is also filled)
             payment_info = 'POS / Bank Transfer';
         } else {
-            // Neither — fall back to generic payment column
+            // Fallback — try generic payment column
             payment_info = get(['payment', 'receipt', 'transaction']) || 'Unknown';
         }
     }
