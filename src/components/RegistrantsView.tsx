@@ -51,7 +51,6 @@ function DistrictStatCard({ registrants, type }: {
     type: 'dcc' | 'lcc';
 }) {
     const [idx, setIdx] = useState(0);
-    const [visible, setVisible] = useState(true);
 
     // Build sorted list
     const map = new Map<string, { count: number; amount: number }>();
@@ -68,15 +67,12 @@ function DistrictStatCard({ registrants, type }: {
     const total = list.length;
     const maxCount = list[0]?.count || 1;
 
+    // Cycle every 4 seconds — no visible toggle needed, AnimatePresence handles it
     useEffect(() => {
         if (list.length <= 1) return;
         const id = setInterval(() => {
-            setVisible(false);
-            setTimeout(() => {
-                setIdx(p => (p + 1) % list.length);
-                setVisible(true);
-            }, 300);
-        }, 3000);
+            setIdx(p => (p + 1) % list.length);
+        }, 4000);
         return () => clearInterval(id);
     }, [list.length]);
 
@@ -103,36 +99,58 @@ function DistrictStatCard({ registrants, type }: {
             <div className="fluid-2xl font-black text-gray-900 leading-none">{total}</div>
             <div className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mt-0.5 mb-auto">{label}</div>
 
-            {/* Animated current item */}
-            <div className="mt-3 pt-2.5 border-t border-gray-50">
+            {/* Fixed-height animated section — no height jump */}
+            <div className="mt-3 pt-2.5 border-t border-gray-50" style={{ height: 52, position: 'relative', overflow: 'hidden' }}>
                 <AnimatePresence mode="wait">
-                    {current && visible && (
-                        <motion.div key={`${type}-${idx}`}
-                            initial={{ opacity: 0, y: 4 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -4 }}
-                            transition={{ duration: 0.22 }}
+                    {current && (
+                        <motion.div
+                            key={`${type}-${idx}`}
+                            style={{ position: 'absolute', inset: 0 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
                         >
-                            <div className="flex items-center justify-between gap-2 mb-1">
+                            {/* Name — slides in first */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -8 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3, delay: 0.05 }}
+                                className="flex items-center justify-between gap-2 mb-1"
+                            >
                                 <span className="text-[10px] font-bold text-gray-700 truncate flex-1">{current.name}</span>
                                 <span className="text-[9px] text-gray-400 flex-shrink-0">{idx + 1}/{total}</span>
-                            </div>
-                            <div className="flex items-center gap-3">
+                            </motion.div>
+
+                            {/* Stats — slides in second */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -8 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3, delay: 0.15 }}
+                                className="flex items-center gap-3 mb-1.5"
+                            >
                                 <span className="text-[10px] font-black" style={{ color }}>
                                     {current.count} delegate{current.count !== 1 ? 's' : ''}
                                 </span>
                                 <span className="text-[10px] text-gray-300">·</span>
                                 <span className="text-[10px] text-emerald-600 font-bold">{formatAmount(current.amount)}</span>
-                            </div>
-                            <div className="mt-1.5 h-1 bg-gray-100 rounded-full overflow-hidden">
+                            </motion.div>
+
+                            {/* Bar — grows in last */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.2, delay: 0.25 }}
+                                className="h-1 bg-gray-100 rounded-full overflow-hidden"
+                            >
                                 <motion.div
                                     key={`bar-${type}-${idx}`}
                                     initial={{ width: 0 }}
                                     animate={{ width: `${Math.round((current.count / maxCount) * 100)}%` }}
-                                    transition={{ duration: 0.45, ease: 'easeOut' }}
+                                    transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
                                     className="h-full rounded-full" style={{ background: color }}
                                 />
-                            </div>
+                            </motion.div>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -532,7 +550,7 @@ export default function RegistrantsView() {
                             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${groupBy === 'dcc' ? 'bg-[#1a5490] text-white' : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
-                            <Building2 size={12} /> By DCC
+                            <Building2 size={12} /> By DCC / GCC
                         </button>
                         <button
                             onClick={() => setGroupBy('lcc')}
